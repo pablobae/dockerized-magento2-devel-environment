@@ -1,0 +1,5 @@
+#!/bin/bash
+[ -z "$1" ] && echo "Please specify a CLI command (ex. ls)" && exit
+source ./conf/project.conf
+
+docker-compose exec -u root ${DOCKER_SERVICE_PHP} "$@"

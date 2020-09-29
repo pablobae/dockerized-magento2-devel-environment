@@ -1,0 +1,67 @@
+# Dockerized Magento 2 devel environment
+# (https://github.com/pablobae/dockerized-magento2-devel-environment)
+#
+# Version 1.0.0
+
+version: "3"
+
+services:
+  app_PROJECTNAME_m2:
+    build:
+      context: .
+      dockerfile: 'conf/docker/app/Dockerfile'
+    ports:
+      - "80:8000"
+      - "443:8443"
+    links:
+      - db_PROJECTNAME_m2
+      - phpfpm_PROJECTNAME_m2
+    volumes: &appvolumes
+#      - ./src/app:/var/www/html/app:delegated
+#      - ./src/vendor:/var/www/html/vendor:delegated
+#      - ./src/composer.json:/var/www/html/composer.json:delegated
+#      - ./src/composer.lock:/var/www/html/composer.lock:delegated
+#      - ./src/nginx.conf.sample:/var/www/html/nginx.conf:delegated
+      - appdata:/var/www/html
+      - sockdata:/sock
+      - ssldata:/etc/nginx/certs
+
+  phpfpm_PROJECTNAME_m2:
+    build:
+      context: .
+      dockerfile: 'conf/docker/phpfpm/Dockerfile'
+    links:
+      - db_PROJECTNAME_m2
+    volumes: *appvolumes
+  db_PROJECTNAME_m2:
+    image: percona:5.7
+    restart: always
+    env_file:
+      - conf/env/db.env
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+
+  mailhog_PROJECTNAME_m2:
+    image: mailhog/mailhog
+    ports:
+      - "1025"
+      - "8025:8025"
+
+
+  # Disabling cron by default as it uses higher CPU, enable if needed
+  #cron:
+  #  image: markoshust/magento-php:7.3-fpm-6
+  #  user: root
+  #  command: /usr/local/bin/cronstart
+  #  tty: true
+  #  links:
+  #    - db
+  #  volumes: *appvolumes
+
+volumes:
+  appdata:
+  dbdata:
+  sockdata:
+  ssldata:

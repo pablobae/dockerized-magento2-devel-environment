@@ -1,0 +1,10 @@
+# Magento Setup
+
+ADMIN_FIRST_NAME=MyName
+ADMIN_LAST_NAME=LastName
+ADMIN_EMAIL=admin@admin.com
+ADMIN_USER=admin
+ADMIN_PASSWORD=password1234
+ADMIN_URL=admin
+CURRENCY=EUR
+LANGUAGE=en_US

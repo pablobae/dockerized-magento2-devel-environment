@@ -1,0 +1,5 @@
+#!/bin/bash
+source conf/env/db.env
+source ./conf/project.conf
+
+bin/cli mysql -h${DOCKER_SERVICE_DB} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} "$@"
