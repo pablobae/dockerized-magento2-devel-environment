@@ -13,7 +13,7 @@ case $i in
     shift
     ;;
     -d=*|--domain=*)
-    DOMAIN="${i#*=}"
+    BASE_URL="${i#*=}"
     shift
     ;;
     *)
@@ -21,7 +21,7 @@ case $i in
 esac
 done
 
-if [ -z ${VERSION} ] || [ -z ${PROJECT_NAME} ] || [ -z ${DOMAIN} ]
+if [ -z ${VERSION} ] || [ -z ${PROJECT_NAME} ] || [ -z ${BASE_URL} ]
 then
     echo "ERROR: Required arguments missing"
     echo "USE: create-project --project=EXAMPLE --domain=EXAMPLE.LOCAL --version=2.3.5"
