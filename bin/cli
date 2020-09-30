@@ -3,4 +3,3 @@
 source ./conf/project.conf
 
 docker-compose exec ${DOCKER_SERVICE_PHP} "$@"
-echo "despues"
