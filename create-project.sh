@@ -101,6 +101,7 @@ bin/setup-ssl ${BASE_URL}
 echo "Configuring post install docker-compose file..."
 docker-compose stop
 sed -i '' "s/#      - \.\/src/      - \.\/src/g" ./docker-compose.yml
+sed -i '' "s/#      - \.\/conf/      - \.\/conf/g" ./docker-compose.yml
 
 docker-compose up -d
 
