@@ -1,5 +1,11 @@
 #!/bin/bash
 
+OS_WSL="wsl"
+OS_UBUNTU="ubuntu"
+OS_DEBIAN="debian"
+OS_MAC="mac"
+
+
 for i in "$@"
 do
 case $i in
@@ -28,9 +34,26 @@ then
     exit
 fi
 
+echo "Detecting OS..."
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  DISTRO=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+  if [[ ${DISTRO} == *"Ubuntu"* ]]; then
+    if uname -a | grep -q '^Linux.*icrosoft' ; then
+      echo "OS=${OS_WSL}" > ./conf/project.conf
+    else
+      echo "OS=${OS_UBUNTU}" > ./conf/project.conf
+    fi
+  elif [[ ${DISTRO} == *"Debian"* ]]; then
+      echo "OS=${OS_DEBIAN}" > ./conf/project.conf
+  else
+      echo "Error: OS not detected"
+  fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+      echo "OS=${OS_MAC}" > ./conf/project.conf
+fi
 
 echo "Saving project configuration..."
-echo "PROJECT_NAME=${PROJECT_NAME}" > ./conf/project.conf
+echo "PROJECT_NAME=${PROJECT_NAME}" >> ./conf/project.conf
 echo "BASE_URL=${BASE_URL}" >> ./conf/project.conf
 echo "VERSION=${VERSION}" >> ./conf/project.conf
 echo "DOCKER_SERVICE_APP"=app_${PROJECT_NAME}_m2 >> ./conf/project.conf
@@ -40,14 +63,24 @@ echo "DOCKER_SERVICE_MAILHOG"=mailhog_${PROJECT_NAME}_m2 >> ./conf/project.conf
 
 source ./conf/project.conf
 
+echo "Script customizations by OS..."
+case $OS in
+  $OS_WSL)
+    SED_FIRST_PARAMETER=
+  ;;
+  *)
+    SED_FIRST_PARAMETER="''"
+  ;;
+esac
 
-### UPDATE /etc/hosts
+## UPDATE /etc/hosts
 echo "Write your system password to add ${BASE_URL} entry to /etc/hosts..."
 echo "127.0.0.1 ::1 ${BASE_URL}" | sudo tee -a /etc/hosts
 
 echo "Configuring docker-compose project file..."
 cp ./conf/base.docker-compose.yml ./docker-compose.yml
-sed -i '' "s/PROJECTNAME/${PROJECT_NAME}/g" ./docker-compose.yml
+sed -i $SED_FIRST_PARAMETER "s/PROJECTNAME/${PROJECT_NAME}/g" ./docker-compose.yml
+
 
 echo "Starting docker services..."
 docker-compose up -d
@@ -100,8 +133,8 @@ bin/setup-ssl ${BASE_URL}
 
 echo "Configuring post install docker-compose file..."
 docker-compose stop
-sed -i '' "s/#      - \.\/src/      - \.\/src/g" ./docker-compose.yml
-sed -i '' "s/#      - \.\/conf/      - \.\/conf/g" ./docker-compose.yml
+sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src/      - \.\/src/g" ./docker-compose.yml
+sed -i $SED_FIRST_PARAMETER "s/#      - \.\/conf/      - \.\/conf/g" ./docker-compose.yml
 
 docker-compose up -d
 
