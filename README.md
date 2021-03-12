@@ -76,14 +76,22 @@ You can find a large list of useful command on **bin** folder, including:
 * **bin/magento**: to run magento 2 cli inside the container
 
 
+## ChangeLog
+[CHANGELOG.md](CHANGELOG.md)
+
+
 ### TODO
+* Add ElasticSearch
 * PHPSTORM integration
 * PHP Mess detector & PHPCs
-* Add ElasticSearch
 
+## Developers
+
+* [Pablo Baenas](https://github.com/pablobae)
 
 ##### INSPIRATION
-Project inspired on https://github.com/markshust/docker-magento 
+Project inspired on https://github.com/markshust/docker-magento
 
-
-[http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html]: http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html
+Licence
+-------
+[GNU General Public License, version 3 (GPLv3)](http://opensource.org/licenses/gpl-3.0)
