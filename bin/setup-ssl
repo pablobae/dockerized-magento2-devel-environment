@@ -4,7 +4,7 @@ BASE_URL=${1:-m2.test}
 
 source ./conf/project.conf
 
-# Generate certificate authority if not already setup
+# Generate certificate authority if not it's already setup
 if ! docker-compose exec -T -u root ${DOCKER_SERVICE_APP} cat /root/.local/share/mkcert/rootCA.pem | grep -q 'BEGIN CERTIFICATE'; then
   bin/setup-ssl-ca
 fi

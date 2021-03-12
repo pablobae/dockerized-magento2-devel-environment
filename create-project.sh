@@ -51,6 +51,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
       echo "OS=${OS_MAC}" > ./conf/project.conf
 fi
+echo "OS_WSL=${OS_WSL}" > ./conf/project.conf
+echo "OS_UBUNTU=${OS_UBUNTU}" > ./conf/project.conf
+echo "OS_DEBIAN=${OS_DEBIAN}" > ./conf/project.conf
+echo "OS_MAC=${OS_MAC}"> ./conf/project.conf
 
 echo "Saving project configuration..."
 echo "PROJECT_NAME=${PROJECT_NAME}" >> ./conf/project.conf
@@ -138,5 +142,5 @@ sed -i $SED_FIRST_PARAMETER "s/#      - \.\/conf/      - \.\/conf/g" ./docker-co
 
 docker-compose up -d
 
-echo "Docker developent environment setup complete."
+echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at https://${BASE_URL}/"
