@@ -35,26 +35,28 @@ then
 fi
 
 echo "Detecting OS..."
+echo "OS_WSL=${OS_WSL}" > ./conf/project.conf
+echo "OS_UBUNTU=${OS_UBUNTU}" >> ./conf/project.conf
+echo "OS_DEBIAN=${OS_DEBIAN}" >> ./conf/project.conf
+echo "OS_MAC=${OS_MAC}">> ./conf/project.conf
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   DISTRO=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
   if [[ ${DISTRO} == *"Ubuntu"* ]]; then
     if uname -a | grep -q '^Linux.*icrosoft' ; then
-      echo "OS=${OS_WSL}" > ./conf/project.conf
+      echo "OS=${OS_WSL}" >> ./conf/project.conf
     else
-      echo "OS=${OS_UBUNTU}" > ./conf/project.conf
+      echo "OS=${OS_UBUNTU}" >> ./conf/project.conf
     fi
   elif [[ ${DISTRO} == *"Debian"* ]]; then
-      echo "OS=${OS_DEBIAN}" > ./conf/project.conf
+      echo "OS=${OS_DEBIAN}" >> ./conf/project.conf
   else
       echo "Error: OS not detected"
+      read -p "Press any key to continue ..."
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-      echo "OS=${OS_MAC}" > ./conf/project.conf
+      echo "OS=${OS_MAC}" >> ./conf/project.conf
 fi
-echo "OS_WSL=${OS_WSL}" > ./conf/project.conf
-echo "OS_UBUNTU=${OS_UBUNTU}" > ./conf/project.conf
-echo "OS_DEBIAN=${OS_DEBIAN}" > ./conf/project.conf
-echo "OS_MAC=${OS_MAC}"> ./conf/project.conf
 
 echo "Saving project configuration..."
 echo "PROJECT_NAME=${PROJECT_NAME}" >> ./conf/project.conf
@@ -84,7 +86,6 @@ echo "127.0.0.1 ::1 ${BASE_URL}" | sudo tee -a /etc/hosts
 echo "Configuring docker-compose project file..."
 cp ./conf/base.docker-compose.yml ./docker-compose.yml
 sed -i $SED_FIRST_PARAMETER "s/PROJECTNAME/${PROJECT_NAME}/g" ./docker-compose.yml
-
 
 echo "Starting docker services..."
 docker-compose up -d
