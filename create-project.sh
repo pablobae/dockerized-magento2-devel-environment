@@ -69,7 +69,7 @@ echo "DOCKER_SERVICE_MAILHOG"=mailhog_${PROJECT_NAME}_m2 >> ./conf/project.conf
 
 source ./conf/project.conf
 
-echo "Script customizations by OS..."
+echo "Script customizations by OS (${OS_MAC})..."
 case $OS in
   $OS_WSL)
     SED_FIRST_PARAMETER=
