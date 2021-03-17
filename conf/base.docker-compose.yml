@@ -50,17 +50,6 @@ services:
       - "1025"
       - "8025:8025"
 
-
-  # Disabling cron by default as it uses higher CPU, enable if needed
-  #cron:
-  #  image: markoshust/magento-php:7.3-fpm-6
-  #  user: root
-  #  command: /usr/local/bin/cronstart
-  #  tty: true
-  #  links:
-  #    - db
-  #  volumes: *appvolumes
-
 volumes:
   appdata:
   dbdata:
