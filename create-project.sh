@@ -144,4 +144,20 @@ sed -i $SED_FIRST_PARAMETER "s/#      - \.\/conf/      - \.\/conf/g" ./docker-co
 docker-compose up -d
 
 echo "Docker development environment setup complete."
+
+case $OS in
+  $OS_WSL)
+    echo "*** ATTENTION: last steps for WSL users ***"
+    echo "1) It's not possible update the windows hosts file from WSL, so you need to add this record manually:"
+    echo "   127.0.0.1 ${BASE_URL}"
+    echo "   Windows hosts file should be in C:\Windows\System32\drivers\etc\hosts"
+    echo "2) Installing CA on windows is not supported from WSL"
+    echo "   You must import it running mmc.exe (as administrator) → Certificates (Local Computer) snap-in → Trusted Root Certificates → Import and select the rootCA.pem file that is in your current folder"
+    read -p "Press any key to continue"
+  ;;
+  *)
+    SED_FIRST_PARAMETER="''"
+  ;;
+esac
+
 echo "You may now access your Magento instance at https://${BASE_URL}/"
