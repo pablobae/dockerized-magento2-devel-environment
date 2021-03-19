@@ -3,27 +3,24 @@ source ./conf/project.conf
 
 docker-compose exec -T -u root ${DOCKER_SERVICE_APP} mkcert -install
 docker cp $(docker-compose ps -q ${DOCKER_SERVICE_APP}|awk '{print $1}'):/root/.local/share/mkcert/rootCA.pem .
-echo "System password requested to install certificate authority on host..."
 
 case $OS in
   $OS_WSL)
     echo "Installing CA on windows is not supported from WSL"
-    echo "Run from Windows PowerShell: "
-    echo "certutil –addstore -enterprise –f \"CA\" WINDOWS_PROJECT_PATH/rootCA.pem"
-    echo "As alternative, you can import it through:  MMC → Certificates (Local Computer) snap-in → Trusted Root Certificates → Import"
-    read -p "Press any key to continue ..."
+    echo "You can import it through:  MMC → Certificates (Local Computer) snap-in → Trusted Root Certificates → Import and select the rootCA.pem file that is in your current folder"
   ;;
   $OS_MAC)
+    echo "System password requested to install certificate authority on host..."
     sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain rootCA.pem
     rm rootCA.pem
   ;;
   *)
+    echo "System password requested to install certificate authority on host..."
     echo "Installing CA on Linux"
     sudo mkdir -p /usr/share/ca-certificates/extra
     openssl x509 -in rootCA.pem -inform PEM -out rootCA.crt
     sudo cp rootCA.pem /usr/share/ca-certificates/extra/rootCA.crt
     sudo update-ca-certificates
-    read -p "Press any key to continue ..."
   ;;
 esac
 
