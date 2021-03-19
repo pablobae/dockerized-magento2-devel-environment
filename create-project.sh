@@ -161,3 +161,10 @@ case $OS in
 esac
 
 echo "You may now access your Magento instance at https://${BASE_URL}/"
+echo "Backend information:"
+echo "- url: https://${BASE_URL}/${ADMIN_URL}"
+echo "- admin user: ${ADMIN_USER}"
+echo "- admin password: ${ADMIN_PASSWORD}"
+echo "- admin email: ${ADMIN_EMAIL}"
+
+
