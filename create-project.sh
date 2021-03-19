@@ -69,7 +69,7 @@ echo "DOCKER_SERVICE_MAILHOG"=mailhog_${PROJECT_NAME}_m2 >> ./conf/project.conf
 
 source ./conf/project.conf
 
-echo "Script customizations by OS..."
+echo "Script customizations by OS (${OS_MAC})..."
 case $OS in
   $OS_WSL)
     SED_FIRST_PARAMETER=
@@ -91,8 +91,19 @@ echo "Starting docker services..."
 docker-compose up -d
 sleep 5 #Ensure containers are loaded
 
+echo "Storing Magento API Keys..."
+read -p "Please enter your Public Magento API KEY: " PUBLIC_API_KEY
+read -p "Please enter your Private Magento API KEY: " PRIVATE_API_KEY
+sed -i $SED_FIRST_PARAMETER "s/<public-key>/${PUBLIC_API_KEY}/g" ./conf/auth.json
+sed -i $SED_FIRST_PARAMETER "s/<private-key>/${PRIVATE_API_KEY}/g" ./conf/auth.json
+docker cp ./conf/auth.json ${DOCKER_SERVICE_APP}:/var/www/.composer/
+
 echo "Creating composer magento 2 project..."
 bin/cli  composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=${VERSION} .
+
+echo "Loading Magento and environment configuration..."
+source conf/setup_magento_config
+source conf/env/db.env
 
 echo "Loading Magento and environment configuration..."
 source conf/setup_magento_config
@@ -144,4 +155,27 @@ sed -i $SED_FIRST_PARAMETER "s/#      - \.\/conf/      - \.\/conf/g" ./docker-co
 docker-compose up -d
 
 echo "Docker development environment setup complete."
+
+case $OS in
+  $OS_WSL)
+    echo "*** ATTENTION: last steps for WSL users ***"
+    echo "1) It's not possible update the windows hosts file from WSL, so you need to add this record manually:"
+    echo "   127.0.0.1 ${BASE_URL}"
+    echo "   Windows hosts file should be in C:\Windows\System32\drivers\etc\hosts"
+    echo "2) Installing CA on windows is not supported from WSL"
+    echo "   You must import it running mmc.exe (as administrator) → Certificates (Local Computer) snap-in → Trusted Root Certificates → Import and select the rootCA.pem file that is in your current folder"
+    read -p "Press any key to continue"
+  ;;
+  *)
+    SED_FIRST_PARAMETER="''"
+  ;;
+esac
+
 echo "You may now access your Magento instance at https://${BASE_URL}/"
+echo "Backend information:"
+echo "- url: https://${BASE_URL}/${ADMIN_URL}"
+echo "- admin user: ${ADMIN_USER}"
+echo "- admin password: ${ADMIN_PASSWORD}"
+echo "- admin email: ${ADMIN_EMAIL}"
+
+
