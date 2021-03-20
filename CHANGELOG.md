@@ -11,6 +11,11 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ### Removed
 
+
+## [1.0.3] - 20-03-2021
+### Removed
+* Auth.json generation
+
 ## [1.0.2] - 19-03-2021
 ### Added
 * Displaying detected OS while project creation
