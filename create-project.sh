@@ -91,13 +91,6 @@ echo "Starting docker services..."
 docker-compose up -d
 sleep 5 #Ensure containers are loaded
 
-echo "Storing Magento API Keys..."
-read -p "Please enter your Public Magento API KEY: " PUBLIC_API_KEY
-read -p "Please enter your Private Magento API KEY: " PRIVATE_API_KEY
-sed -i $SED_FIRST_PARAMETER "s/<public-key>/${PUBLIC_API_KEY}/g" ./conf/auth.json
-sed -i $SED_FIRST_PARAMETER "s/<private-key>/${PRIVATE_API_KEY}/g" ./conf/auth.json
-docker cp ./conf/auth.json ${DOCKER_SERVICE_APP}:/var/www/.composer/
-
 echo "Creating composer magento 2 project..."
 bin/cli  composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=${VERSION} .
 
