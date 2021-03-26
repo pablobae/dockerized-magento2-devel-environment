@@ -1,4 +1,5 @@
 #!/bin/bash
-source ./conf/project.conf
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
 
-bin/cli bash
+$BIN_PATH/cli bash

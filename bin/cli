@@ -1,5 +1,7 @@
 #!/bin/bash
 [ -z "$1" ] && echo "Please specify a CLI command (ex. ls)" && exit
-source ./conf/project.conf
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
 
 docker-compose exec ${DOCKER_SERVICE_PHP} "$@"

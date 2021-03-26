@@ -8,6 +8,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Added
 
 ### Changed
+* bin/commands issue when they are called from not project root folder
 
 ### Removed
 

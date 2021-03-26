@@ -1,5 +1,6 @@
 #!/bin/bash
-source conf/env/db.env
-source ./conf/project.conf
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+source $CONF_PATH/env/db.env
 
-bin/cli mysql -h${DOCKER_SERVICE_DB} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} "$@"
+$BIN_PATH/cli mysql -h${DOCKER_SERVICE_DB} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} "$@"
