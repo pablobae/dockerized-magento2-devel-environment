@@ -66,7 +66,11 @@ echo "DOCKER_SERVICE_APP"=app_${PROJECT_NAME}_m2 >> ./conf/project.conf
 echo "DOCKER_SERVICE_PHP"=phpfpm_${PROJECT_NAME}_m2 >> ./conf/project.conf
 echo "DOCKER_SERVICE_DB"=db_${PROJECT_NAME}_m2 >> ./conf/project.conf
 echo "DOCKER_SERVICE_MAILHOG"=mailhog_${PROJECT_NAME}_m2 >> ./conf/project.conf
-echo "PROJECT_PATH"="$(cd "$(dirname "$0")" && pwd)" >> ./conf/project.conf
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+echo "PROJECT_PATH"=${CURRENT_PATH} >> ./conf/project.conf
+echo "BIN_PATH"=${CURRENT_PATH}/bin >> ./conf/project.conf
+echo "SRC_PATH"=${CURRENT_PATH}/src >> ./conf/project.conf
+echo "CONF_PATH"=${CURRENT_PATH}/conf >> ./conf/project.conf
 
 source ./conf/project.conf
 
