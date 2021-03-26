@@ -1,13 +1,15 @@
 #!/bin/bash
 echo "Correcting filesystem permissions..."
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
 
 if [ -z "$1" ]; then
-  bin/clinotty find var vendor pub/static pub/media app/etc -type f -exec chmod u+w {} \;
-  bin/clinotty find var vendor pub/static pub/media app/etc -type d -exec chmod u+w {} \;
-  bin/clinotty chmod u+x bin/magento
+  $BIN_PATH/clinotty find var vendor pub/static pub/media app/etc -type f -exec chmod u+w {} \;
+  $BIN_PATH/clinotty find var vendor pub/static pub/media app/etc -type d -exec chmod u+w {} \;
+  $BIN_PATH/clinotty chmod u+x bin/magento
 else
-  bin/clinotty find $1 -type f -exec chmod u+w {} \;
-  bin/clinotty find $1 -type d -exec chmod u+w {} \;
+  $BIN_PATH/clinotty find $1 -type f -exec chmod u+w {} \;
+  $BIN_PATH/clinotty find $1 -type d -exec chmod u+w {} \;
 fi
 
 echo "Filesystem permissions corrected."
