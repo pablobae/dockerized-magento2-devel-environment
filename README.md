@@ -14,6 +14,7 @@ This project aims to offer a quick and easy solution for preparing Magento local
 * Multi-project: docker service names are created dynamically by project
 * Xdebug ready
 * Docker mounted points optimization
+* Sync data with prod and test server included
 
 
 ## Download
