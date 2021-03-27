@@ -74,6 +74,9 @@ You can find a large list of useful command on **bin** folder, including:
 * **bin/xdebug**: enable or disable xdebug. By default is disabled.
 * **bin/composer**: to run composer commands inside the container
 * **bin/magento**: to run magento 2 cli inside the container
+* **bin/databaseimport**: to import database
+* **bin/sync**: to syncronyze local database with remote database
+
 
 
 ## ChangeLog

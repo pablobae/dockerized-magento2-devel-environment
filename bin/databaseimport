@@ -1,0 +1,21 @@
+#!/bin/bash
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+source $CONF_PATH/env/db.env
+
+[ -z "$1" ] && echo "Please specify a database file to importing" && exit
+
+if ! test -f $1
+then
+  echo "ERROR: ${1} file not found."
+  exit;
+fi
+
+IMPORT_SCRIPT=importDatabase.sh
+echo "echo 'Importing database...'" > $SRC_PATH/$IMPORT_SCRIPT &&
+echo "mysql -h${DOCKER_SERVICE_DB} -u root --password=${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} -vv < ${1}" >> $SRC_PATH/$IMPORT_SCRIPT &&
+echo "echo 'Done'" >> $SRC_PATH/$IMPORT_SCRIPT&&
+$BIN_PATH/copytocontainer $IMPORT_SCRIPT &&
+$BIN_PATH/cli sh $IMPORT_SCRIPT &&
+rm $SRC_PATH/$IMPORT_SCRIPT &&
+$BIN_PATH/cli rm $IMPORT_SCRIPT

@@ -1,0 +1,20 @@
+## Edit this file with your prod and test server information
+PROD_SSH_HOST=prod-ssh-server
+PROD_SSH_PORT=prod-ssh-port
+PROD_SSH_USER=prod-ssh-user
+PROD_SSH_KEY=prod-local-ssh-key-path
+PROD_MAGENTO_DOC_ROOT=prod-magento-document-root-path-from-user-home
+PROD_DB_HOST=prod-database-host
+PROD_DB_USER=prod-database-user
+PROD_DB_PASS=prod-database-password
+PROD_DB_DATABASE=prod-database-database-name
+
+TEST_SSH_HOST=test-ssh-server
+TEST_SSH_PORT=test-ssh-port
+TEST_SSH_USER=test-ssh-user
+TEST_SSH_KEY=test-local-ssh-key-path
+TEST_MAGENTO_DOC_ROOT=test-magento-document-root-path-from-user-home
+TEST_DB_HOST=test-database-host
+TEST_DB_USER=test-database-user
+TEST_DB_PASS=test-database-password
+TEST_DB_DATABASE=test-database-database-name
