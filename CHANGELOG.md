@@ -6,6 +6,8 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+* Added **importdatabase** command to import database file
+* Added **sync** command to synchronize local environment (database and media) from remote servers
 
 ### Changed
 * bin/commands issue when they are called from not project root folder
