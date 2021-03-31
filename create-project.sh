@@ -94,10 +94,6 @@ echo "127.0.0.1 ::1 ${BASE_URL}" | sudo tee -a /etc/hosts
 echo "Configuring docker-compose project file..."
 cp ./conf/base.docker-compose.yml ./docker-compose.yml
 sed -i $SED_FIRST_PARAMETER "s/PROJECTNAME/${PROJECT_NAME}/g" $PROJECT_PATH/docker-compose.yml
-if test -f $PROJECT_PATH/docker-compose.yml''
-then
-  rm -f $PROJECT_PATH/docker-compose.yml\'\'
-fi
 
 echo "Starting docker services..."
 docker-compose up -d
