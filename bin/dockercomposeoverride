@@ -1,0 +1,37 @@
+#!/bin/bash
+## Description: Generate docker-compose override conf file.
+## Usage: dockercomposeoverride
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+source $CONF_PATH/env/db.env
+
+generate_override() {
+  cp -f $PROJECT_PATH/docker-compose.yml $PROJECT_PATH/docker-compose.override.yml.disabled
+  if test -f $PROJECT_PATH/docker-compose.override.yml
+  then
+    rm -f PROJECT_PATH/docker-compose.override.yml
+  fi
+  echo "docker-compose.override.yml.disabled file generated"
+}
+
+if test -f $PROJECT_PATH/docker-compose.override.yml  | test -f $PROJECT_PATH/docker-compose.override.yml.disabled
+then
+  echo "docker.compose.override.yml or docker.compose.override.yml.disables already exist."
+  while true; do
+    read -p "Do you want generate it again and override the existing files? [Yes/No]" override
+    case  $override in
+      [Yy]* )
+        generate_override;
+        break;;
+      [Nn]* )
+        break;;
+      *) echo "Please answer Y for generate the file again, or N for don't generate it";;
+    esac;
+  done
+else
+  generate_override;
+fi
+
+echo "Add your custom configuration to the docker-compose.override.yml.disabled file, save the file and execute bin/performance on command";
+echo "For a basic performance configuration run bin/configperformance";
