@@ -2,5 +2,10 @@
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 
-docker-compose --project-directory $PROJECT_PATH up -d --remove-orphans
+DOCKER_FILE=docker-compose.yml
+if test -f $PROJECT_PATH/docker-compose.override.yml
+then
+  DOCKER_FILE=docker-compose.override.yml
+fi
 
+docker-compose --project-directory $PROJECT_PATH -f $DOCKER_FILE up -d --remove-orphans
