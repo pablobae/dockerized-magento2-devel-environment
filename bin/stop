@@ -2,4 +2,4 @@
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 
-docker-compose -f $PROJECT_PATH/docker-compose.yml stop
+docker-compose --project-directory $PROJECT_PATH stop

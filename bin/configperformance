@@ -1,0 +1,52 @@
+#!/bin/bash
+## Description: Set basic performance config for docker-compose override file
+## Usage: configperformance
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+source $CONF_PATH/env/db.env
+
+
+configure_basic_performance_configuration() {
+  case $OS in
+    $OS_WSL)
+      SED_FIRST_PARAMETER=
+    ;;
+    *)
+      SED_FIRST_PARAMETER="''"
+    ;;
+  esac
+  sed -i $SED_FIRST_PARAMETER "s/      - \.\/src:/#      - \.\/src:/g" $OVERRIDE_FILE
+  sed -i $SED_FIRST_PARAMETER "s/#      - appdata/      - appdata/g" $OVERRIDE_FILE
+  sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/app/      - \.\/src\/app/g" $OVERRIDE_FILE
+  sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/vendor/      - \.\/src\/vendor/g" $OVERRIDE_FILE
+  if test -f $OVERRIDE_FILE\'\'
+  then
+    rm -f $OVERRIDE_FILE\'\'
+  fi
+}
+
+echo "Configuring basic performance configuration..."
+
+if ! test -f $PROJECT_PATH/docker-compose.override.yml && ! test -f $PROJECT_PATH/docker-compose.override.yml.disabled
+then
+  echo "ERROR: docker-compose.override.yml files not found. Have you generated it?"
+  exit
+elif test -f $PROJECT_PATH/docker-compose.override.yml
+then
+      OVERRIDE_FILE=$PROJECT_PATH/docker-compose.override.yml
+      $BIN_PATH/stop &&
+      configure_basic_performance_configuration &&
+      mv $OVERRIDE_FILE $OVERRIDE_FILE.disabled
+else
+      OVERRIDE_FILE=$PROJECT_PATH/docker-compose.override.yml.disabled
+      configure_basic_performance_configuration
+fi
+
+echo "Basic performance configuration generated"
+echo "Mounted folders:"
+echo "   - app"
+echo "   - vendor"
+echo "Run bin/performance on command to enabled it"
+
+
