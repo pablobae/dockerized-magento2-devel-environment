@@ -8,7 +8,8 @@ source $CURRENT_PATH/../conf/project.conf
 $BIN_PATH/stop &&
 $BIN_PATH/removeall
 rm -rf $PROJECT_PATH/src > /dev/null
-rm -rf $CONF_PATH/docker* > /dev/null
+rm -rf $PROJECT_PATH/docker* > /dev/null
+rm -rf $PROJECT_PATH/*.sql > /dev/null
 rm -rf $CONF_PATH/repo.conf > /dev/null
 rm -rf $CONF_PATH/syncservers.conf > /dev/null
 rm -rf $CONF_PATH/project.conf > /dev/null
