@@ -5,8 +5,8 @@ SYNCSERVERS_FILE_NAME=syncservers.conf
 
 if ! test -f "${CONF_PATH}/${SYNCSERVERS_FILE_NAME}"
 then
-  echo "ERROR: conf/repo.conf file not found."
-  echo "Copy conf/repo.conf.dist to conf/repo.conf and edit it with your servers information."
+  echo "ERROR: conf/syncservers.conf file not found."
+  echo "Copy conf/syncservers.conf.dist to conf/syncservers.conf and edit it with your servers information."
   exit;
 fi
 
