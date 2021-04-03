@@ -151,16 +151,20 @@ bin/setup-ssl ${BASE_URL}
 echo "Configuring post install docker-compose file..."
 docker-compose stop
 sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src:/      - \.\/src:/g" ./docker-compose.yml
-sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/nginx/      - \.\/src\/nginx/g" ./docker-compose.yml
 sed -i $SED_FIRST_PARAMETER "s/#      - \.\/conf/      - \.\/conf/g" ./docker-compose.yml
 sed -i $SED_FIRST_PARAMETER "s/      - appdata/#      - appdata/g" ./docker-compose.yml
 
+$BIN_PATH/start
+sleep 5 #Ensure containers are loaded
+
+#Removing unneed mounted files
+cp $SRC_PATH/nginx.conf.sample $SRC_PATH/nginx.conf
 if test -f $PROJECT_PATH/docker-compose.yml\'\'
 then
   rm -f $PROJECT_PATH/docker-compose.yml\'\'
 fi
-docker-compose up -d
 
+$BIN_PATH/restart
 echo "Docker development environment setup complete."
 
 case $OS in
