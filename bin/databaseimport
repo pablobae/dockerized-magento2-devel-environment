@@ -26,9 +26,4 @@ if test -f $SRC_PATH/$IMPORT_SCRIPT
 then
   rm $SRC_PATH/$IMPORT_SCRIPT
 fi
-if test -f $SRC_PATH/$FILE_NAME
-then
-  rm $SRC_PATH/$FILE_NAME
-fi
-
 
