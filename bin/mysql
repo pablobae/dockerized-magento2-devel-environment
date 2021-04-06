@@ -1,5 +1,14 @@
 #!/bin/bash
-source conf/env/db.env
-source ./conf/project.conf
 
-bin/cli mysql -h${DOCKER_SERVICE_DB} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} "$@"
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: mysql"
+  echo "DESCRIPTION: Execute mysql query commands to the database server"
+  echo "USAGE: mysql MYSQL_COMMAND"
+  exit
+fi
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+source $CONF_PATH/env/db.env
+
+$BIN_PATH/cli mysql -h${DOCKER_SERVICE_DB} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} "$@"

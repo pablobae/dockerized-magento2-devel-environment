@@ -1,6 +1,16 @@
 #!/bin/bash
 
 [ -z "$1" ] && echo "Please specify a CLI command (ex. ls)" && exit
-source ./conf/project.conf
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: clinotty"
+  echo "DESCRIPTION: Execute command line commands in the container disabling Docker pseudo-tty allocation"
+  echo "USAGE: clinotty LINUX_COMMAND"
+  echo "EXAMPLE: clinotty ls -la"
+  exit
+fi
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
 
 docker-compose exec -T ${DOCKER_SERVICE_PHP} "$@"

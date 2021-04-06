@@ -1,2 +1,13 @@
 #!/bin/bash
-bin/cli composer "$@"
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: composer"
+  echo "DESCRIPTION: Run composer command inside the project container"
+  echo "USAGE: composer COMPOSER_OPTIONS"
+  echo "EXAMPLE: composer install"
+  exit
+fi
+
+$BIN_PATH/cli composer "$@"

@@ -1,0 +1,62 @@
+#!/bin/bash
+## Description: Enable or disable performance settings
+## Usage: performance on|off
+
+[ -z "$1" ] && echo "Please specify 'on' or 'off' to enable or disable performance settings" && exit
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: performance"
+  echo "DESCRIPTION: Enable or disable performance and custom modifications reading docker-compose.override.yml file"
+  echo "USAGE: performance on|off"
+  echo "EXAMPLE: performance on"
+  echo "         performance off"
+  exit
+fi
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+source $CONF_PATH/env/db.env
+
+enable_performance() {
+  echo "Enabling performance..."
+  if test -f $PROJECT_PATH/docker-compose.override.yml; then
+    echo "Performance is already ON. Check your docker-compose.override.yml file"
+    exit
+  else
+    if test -f $PROJECT_PATH/docker-compose.override.yml.disabled; then
+      $BIN_PATH/stop &&
+        mv $PROJECT_PATH/docker-compose.override.yml.disabled $PROJECT_PATH/docker-compose.override.yml
+      if ! test -f $SRC_PATH/nginx.conf; then
+        cp -f $SRC_PATH/nginx.conf.sample $SRC_PATH/nginx.conf
+      fi
+      $BIN_PATH/start
+      $BIN_PATH/copytocontainer --all
+      $BIN_PATH/restart
+    else
+      echo "Compose override file missing. You need to generate it and add your performance points first"
+      echo "Run bin/composeoverride and add your custom options"
+    fi
+  fi
+}
+
+disable_performance() {
+  echo "Disabling performance.."
+  echo "Updating local data from container"
+  $BIN_PATH/copyfromcontainer --all
+  $BIN_PATH/stop &&
+    mv $PROJECT_PATH/docker-compose.override.yml $PROJECT_PATH/docker-compose.override.yml.disabled
+  $BIN_PATH/start
+}
+
+echo "Setting performance configuration..."
+case "$1" in
+"on")
+  enable_performance
+  ;;
+"off")
+  disable_performance
+  ;;
+*)
+  echo "Please specify 'on' or 'off' to enable or disable performance settings"
+  ;;
+esac

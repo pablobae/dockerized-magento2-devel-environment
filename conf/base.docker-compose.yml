@@ -17,13 +17,11 @@ services:
       - db_PROJECTNAME_m2
       - phpfpm_PROJECTNAME_m2
     volumes: &appvolumes
-#      - ./src/app:/var/www/html/app:delegated
-#      - ./src/vendor:/var/www/html/vendor:delegated
-#      - ./src/composer.json:/var/www/html/composer.json:delegated
-#      - ./src/composer.lock:/var/www/html/composer.lock:delegated
-#      - ./src/nginx.conf.sample:/var/www/html/nginx.conf:delegated
+#      - ./src:/var/www/html:delegated
 #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:delegated
       - appdata:/var/www/html
+#      - ./src/app:/var/www/html/app:delegated
+#      - ./src/vendor:/var/www/html/vendor:delegated
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
 
