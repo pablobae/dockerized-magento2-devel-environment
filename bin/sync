@@ -1,12 +1,21 @@
 #!/bin/bash
+if
+ [ "$1" == "--help" ]
+then
+  echo "COMMAND: sync"
+  echo "DESCRIPTION: Syncronize your local database and/or media files with production or test server."
+  echo "USAGE: sync"
+  exit;
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 SYNCSERVERS_FILE_NAME=syncservers.conf
 
 if ! test -f "${CONF_PATH}/${SYNCSERVERS_FILE_NAME}"
 then
-  echo "ERROR: conf/repo.conf file not found."
-  echo "Copy conf/repo.conf.dist to conf/repo.conf and edit it with your servers information."
+  echo "ERROR: conf/syncservers.conf file not found."
+  echo "Copy conf/syncservers.conf.dist to conf/syncservers.conf and edit it with your servers information."
   exit;
 fi
 
@@ -47,17 +56,17 @@ done
 
 # sync
 ssh $SSH_USER@$SSH_HOST -p $SSH_PORT -i $SSH_KEY "mysqldump --user=${DATABASE_USER} --password=${DATABASE_PASS} ${DATABASE_NAME} > ${DATABASE_BACKUP_FILE};"
-scp -P $SSH_PORT -i $SSH_KEY $SSH_USER@$SSH_HOST:$DATABASE_BACKUP_FILE .
+scp -P $SSH_PORT -i $SSH_KEY $SSH_USER@$SSH_HOST:$DATABASE_BACKUP_FILE $SRC_PATH/$DATABASE_BACKUP_FILE
 ssh $SSH_USER@$SSH_HOST -p $SSH_PORT -i $SSH_KEY "rm ${DATABASE_BACKUP_FILE};"
 
-if ! test -f "${DATABASE_BACKUP_FILE}"
+if ! test -f "${SRC_PATH}/${DATABASE_BACKUP_FILE}"
 then
   echo "ERROR: database backup file not found"
+    echo "${SRC_PATH}/${DATABASE_BACKUP_FILE}"
 else
   echo "Importing database locally..."
   $BIN_PATH/copytocontainer $DATABASE_BACKUP_FILE
-  $BIN_PATH/databaseimport $DATABASE_BACKUP_FILE
-  $BIN_PATH/cli rm $DATABASE_BACKUP_FILE
+  $BIN_PATH/databaseimport $SRC_PATH/$DATABASE_BACKUP_FILE
   while true; do
     read -p "Do you wish sync media folder? [Yes/No/Cancel]" syncMedia
     case $syncMedia in
@@ -72,6 +81,7 @@ else
       * ) echo "Please answer Y for Yes, N for No or C for exit";;
     esac
   done
+  echo "Configuring local changes"
   $BIN_PATH/magento setup:store-config:set --base-url="https://${BASE_URL}" &&
   $BIN_PATH/magento setup:store-config:set --base-url-secure="https://${BASE_URL}" &&
   $BIN_PATH/magento setup:config:set --backend-frontname="admin" &&

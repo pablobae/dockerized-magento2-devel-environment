@@ -1,4 +1,12 @@
 #!/bin/bash
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: mysql"
+  echo "DESCRIPTION: Execute mysql query commands to the database server"
+  echo "USAGE: mysql MYSQL_COMMAND"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 source $CONF_PATH/env/db.env

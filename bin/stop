@@ -1,5 +1,17 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: stop"
+  echo "DESCRIPTION: Stop docker environment"
+  echo "USAGE: stop"
+  exit
+fi
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 
-docker-compose --project-directory $PROJECT_PATH stop
+DOCKER_FILE=docker-compose.yml
+if test -f $PROJECT_PATH/docker-compose.override.yml
+then
+  DOCKER_FILE=docker-compose.override.yml
+fi
+
+docker-compose --project-directory $PROJECT_PATH -f $DOCKER_FILE stop

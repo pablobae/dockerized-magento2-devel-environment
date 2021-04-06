@@ -1,6 +1,14 @@
 #!/bin/bash
 [ -z "$1" ] && echo "Please specify a domain (ex. mydomain.test)" && exit
 
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: setup-ssl"
+  echo "DESCRIPTION: Setup SSL certificate for the project"
+  echo "USAGE: setup-ssl PROJECT_BASE_URL"
+  echo "EXAMPLE: setup-ssl m2.test"
+  exit
+fi
+
 BASE_URL=${1:-m2.test}
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf

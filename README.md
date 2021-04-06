@@ -14,7 +14,7 @@ This project aims to offer a quick and easy solution for preparing Magento local
 * Multi-project: docker service names are created dynamically by project
 * Xdebug ready
 * Docker mounted points optimization
-* Sync data with prod and test server included
+* Sync data from production and test server included
 
 
 ## Download
@@ -56,12 +56,34 @@ More info in [Magento official documentation][http://devdocs.magento.com/guides/
 The installation process includes generating a self-signed cert to be used with the domain and its CA cert. To avoid system security warning, the CA cert is imported to your System Keychain and you will be asked for your password to do this.
 
 
-### Docker mounted points
+### Docker mounted points and docker performance improvement
+By the default all magento document root is mounted:
+
+```
+src : /var/www/html
+```
+
+This can be changed easily to improve Docker performance on Windows and Mac with these steps:
+
+Run **bin/dockercomposeoverride** to generate a *docker-compose.override.yml* file
+```
+bin/dockercomposeoverride
+```
+Now you can edit that file to mount your desired folders and files or you can run **bin/configperformance** to configure automatically that file to include the following mounted folders and files:
+
 ```
 src/app : /var/www/html/app
 src/vendor : /var/www/html/vendor
-src/composer.json : /var/www/html/composer.json
-src/composer.lock : /var/www/html/composer.lock 
+```
+
+Finally, use **bin/performance** command to enable your changes
+```
+bin/performance on
+```
+
+If you want disable your performance changes run
+```
+bin/performance off
 ```
 
 You can add or remove them editing the **docker-composer.yml** file generated during the **create-project.sh** execution.
@@ -77,8 +99,13 @@ You can find a large list of useful command on **bin** folder, including:
 * **bin/magento**: to run magento 2 cli inside the container
 * **bin/databaseimport**: to import database
 * **bin/sync**: to syncronyze local database with remote database
+* **bin/clone**: to clone data from githubrepository
+* ...
 
-
+You can get detailed information of each command and how to use it running the command with the **--help** option:
+```
+bin/bash --help
+```
 
 ## ChangeLog
 [CHANGELOG.md](CHANGELOG.md)

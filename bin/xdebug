@@ -1,4 +1,13 @@
 #!/bin/bash
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: xdebug"
+  echo "DESCRIPTION: Enable or disable xdebug."
+  echo "USAGE: xdebug on|off"
+  echo "EXAMPLE: xdebug on"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 

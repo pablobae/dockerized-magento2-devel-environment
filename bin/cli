@@ -1,5 +1,12 @@
 #!/bin/bash
 [ -z "$1" ] && echo "Please specify a CLI command (ex. ls)" && exit
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: cli"
+  echo "DESCRIPTION: Execute command line commands in the container"
+  echo "USAGE: cli LINUX_COMMAND"
+  echo "EXAMPLE: cli ls -la"
+  exit
+fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf

@@ -1,5 +1,15 @@
 #!/bin/bash
+## Description: open a bash shell container
+## Usage: bash
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: bash"
+  echo "DESCRIPTION: Open Bash shell container"
+  echo "USAGE: bash"
+  echo "EXAMPLE: bash"
+  exit
+fi
 
 $BIN_PATH/cli bash

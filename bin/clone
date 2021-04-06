@@ -1,0 +1,42 @@
+#!/bin/bash
+## Description: Clone github repository into the project.
+## Usage: clone
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: clone"
+  echo "DESCRIPTION: Clone your github repository locally and import it to the project."
+  echo "USAGE: clone"
+  exit
+fi
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+REPO_CONF_FILENAME=repo.conf
+
+if ! test -f "${CONF_PATH}/${REPO_CONF_FILENAME}"; then
+  echo "ERROR: conf/repo.conf file not found."
+  echo "Copy conf/repo.conf.dist to conf/repo.conf and edit it with your repository information."
+  exit
+fi
+
+source $CONF_PATH/$REPO_CONF_FILENAME
+
+$BIN_PATH/stop &&
+  TEMP_DATA_FOLDER=$PROJECT_PATH/temp_data_$PROJECT_NAME
+
+echo "Cloning repository..." &&
+  git clone $REPOSITORY $TEMP_DATA_FOLDER &&
+  cp -rp $TEMP_DATA_FOLDER/* $SRC_PATH &&
+  rm -rf $SRC_PATH/.git
+mv $TEMP_DATA_FOLDER/.git $SRC_PATH &&
+  rm -rf $TEMP_DATA_FOLDER &&
+  echo "Updating environment..." &&
+  $BIN_PATH/start &&
+  echo "Copy data to container..." &&
+  $BIN_PATH/copytocontainer --all &&
+  $BIN_PATH/cli composer install &&
+  $BIN_PATH/magento setup:upgrade &&
+  $BIN_PATH/magento setup:di:compile &&
+  $BIN_PATH/magento setup:static-content:deploy -f &&
+  $BIN_PATH/magento cache:clean &&
+  $BIN_PATH/magento cache:flush

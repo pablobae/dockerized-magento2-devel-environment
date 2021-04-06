@@ -1,4 +1,12 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: setup-ssl-ca"
+  echo "DESCRIPTION: Import SSL CA on host system"
+  echo "USAGE: setup-ssl-ca PROJECT_BASE_URL"
+  echo "EXAMPLE: setup-ssl-ca m2.test"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 

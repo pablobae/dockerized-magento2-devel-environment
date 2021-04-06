@@ -1,4 +1,11 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: restart"
+  echo "DESCRIPTION: Restart docker environment"
+  echo "USAGE: restart"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 $BIN_PATH/stop
