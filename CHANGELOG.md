@@ -12,6 +12,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 * Added **performance** command: enable or disable docker-compose-override file with your customizations
 * Added **importdatabase** command to import database file
 * Added **sync** command to synchronize local environment (database and media) from remote servers
+* Added **clone** command to import data from a github repository
 
 ### Changed
 * Updated **start** and **stop** command to support docker-compose.override files
@@ -19,7 +20,6 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 * bin/commands issue when they are called from not project root folder
 
 ### Removed
-
 
 ## [1.0.3] - 20-03-2021
 ### Removed
