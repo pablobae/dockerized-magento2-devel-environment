@@ -1,3 +1,13 @@
 #!/bin/bash
-bin/remove
-bin/removevolumes
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: removeall"
+  echo "DESCRIPTION: Remove docker containers and volumes"
+  echo "USAGE: removeall"
+  exit
+fi
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+
+$BIN_PATH/remove
+$BIN_PATH/removevolumes

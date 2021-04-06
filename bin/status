@@ -1,2 +1,11 @@
 #!/bin/bash
-docker-compose -f docker-compose.yml ps
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: status"
+  echo "DESCRIPTION: Display docker containers informatios"
+  echo "USAGE: status"
+  exit
+fi
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
+
+docker-compose -f $PROJECT_PATH/docker-compose.yml ps

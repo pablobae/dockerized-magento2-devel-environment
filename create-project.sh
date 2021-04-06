@@ -66,6 +66,11 @@ echo "DOCKER_SERVICE_APP"=app_${PROJECT_NAME}_m2 >> ./conf/project.conf
 echo "DOCKER_SERVICE_PHP"=phpfpm_${PROJECT_NAME}_m2 >> ./conf/project.conf
 echo "DOCKER_SERVICE_DB"=db_${PROJECT_NAME}_m2 >> ./conf/project.conf
 echo "DOCKER_SERVICE_MAILHOG"=mailhog_${PROJECT_NAME}_m2 >> ./conf/project.conf
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+echo "PROJECT_PATH"=${CURRENT_PATH} >> ./conf/project.conf
+echo "BIN_PATH"=${CURRENT_PATH}/bin >> ./conf/project.conf
+echo "SRC_PATH"=${CURRENT_PATH}/src >> ./conf/project.conf
+echo "CONF_PATH"=${CURRENT_PATH}/conf >> ./conf/project.conf
 
 source ./conf/project.conf
 
@@ -79,13 +84,16 @@ case $OS in
   ;;
 esac
 
+echo "SED_FIRST_PARAMETER"=${SED_FIRST_PARAMETER} >> ./conf/project.conf
+
+
 ## UPDATE /etc/hosts
 echo "Write your system password to add ${BASE_URL} entry to /etc/hosts..."
 echo "127.0.0.1 ::1 ${BASE_URL}" | sudo tee -a /etc/hosts
 
 echo "Configuring docker-compose project file..."
 cp ./conf/base.docker-compose.yml ./docker-compose.yml
-sed -i $SED_FIRST_PARAMETER "s/PROJECTNAME/${PROJECT_NAME}/g" ./docker-compose.yml
+sed -i $SED_FIRST_PARAMETER "s/PROJECTNAME/${PROJECT_NAME}/g" $PROJECT_PATH/docker-compose.yml
 
 echo "Starting docker services..."
 docker-compose up -d
@@ -142,11 +150,21 @@ bin/setup-ssl ${BASE_URL}
 
 echo "Configuring post install docker-compose file..."
 docker-compose stop
-sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src/      - \.\/src/g" ./docker-compose.yml
+sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src:/      - \.\/src:/g" ./docker-compose.yml
 sed -i $SED_FIRST_PARAMETER "s/#      - \.\/conf/      - \.\/conf/g" ./docker-compose.yml
+sed -i $SED_FIRST_PARAMETER "s/      - appdata/#      - appdata/g" ./docker-compose.yml
 
-docker-compose up -d
+$BIN_PATH/start
+sleep 5 #Ensure containers are loaded
 
+#Removing unneed mounted files
+cp $SRC_PATH/nginx.conf.sample $SRC_PATH/nginx.conf
+if test -f $PROJECT_PATH/docker-compose.yml\'\'
+then
+  rm -f $PROJECT_PATH/docker-compose.yml\'\'
+fi
+
+$BIN_PATH/restart
 echo "Docker development environment setup complete."
 
 case $OS in
