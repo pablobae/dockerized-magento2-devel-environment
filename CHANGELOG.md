@@ -6,6 +6,11 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
+
+## [1.0.4] - 06-04-2021
+### Added
 * Added **reset** command to restore local environment files, docker data,..
 * Added **dockercomposeoverride** command: generate a docker-composer.override.yml file to override
 * Added **configperformance** command: customize docker-compose.override.yml with only some folders mounted between the host and the container
@@ -13,6 +18,8 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 * Added **importdatabase** command to import database file
 * Added **sync** command to synchronize local environment (database and media) from remote servers
 * Added **clone** command to import data from a github repository
+* Added **--help** option to all **bin/commands** to display command information
+
 
 ### Changed
 * Updated **start** and **stop** command to support docker-compose.override files
