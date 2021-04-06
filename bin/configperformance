@@ -2,6 +2,13 @@
 ## Description: Set basic performance config for docker-compose override file
 ## Usage: configperformance
 
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: confirperformance"
+  echo "DESCRIPTION: Create a basic config performance improvement with only the next mounted points: src/app and src/vendor"
+  echo "USAGE: configperformance"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 source $CONF_PATH/env/db.env
@@ -30,7 +37,7 @@ echo "Configuring basic performance configuration..."
 
 if ! test -f $PROJECT_PATH/docker-compose.override.yml && ! test -f $PROJECT_PATH/docker-compose.override.yml.disabled
 then
-  echo "ERROR: docker-compose.override.yml files not found. Have you generated it?"
+  echo "ERROR: docker-compose.override.yml files not found. Have you generated it? Run bin/dockercomposeoverride"
   exit
 elif test -f $PROJECT_PATH/docker-compose.override.yml
 then

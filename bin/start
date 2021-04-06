@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: start"
+  echo "DESCRIPTION: Start docker environment"
+  echo "USAGE: start"
+  exit
+fi
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 

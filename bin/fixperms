@@ -1,4 +1,11 @@
 #!/bin/bash
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: fixperms"
+  echo "DESCRIPTION: Fixes permissions in the container files/directories."
+  echo "USAGE: fixperms"
+  exit
+fi
 echo "Correcting filesystem permissions..."
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf

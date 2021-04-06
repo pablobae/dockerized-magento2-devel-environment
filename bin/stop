@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: stop"
+  echo "DESCRIPTION: Stop docker environment"
+  echo "USAGE: stop"
+  exit
+fi
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 

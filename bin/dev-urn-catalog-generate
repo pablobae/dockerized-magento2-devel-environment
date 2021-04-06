@@ -1,6 +1,15 @@
 #!/bin/bash
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: dev-urn-catalog-generate"
+  echo "DESCRIPTION: Generate magento URN xml file to be used by PHPStorm"
+  echo "USAGE: dev-urn-catalog-generate"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
+
 
 $BIN_PATH/magento dev:urn-catalog:generate misc.xml
 $BIN_PATH/copyfromcontainer misc.xml

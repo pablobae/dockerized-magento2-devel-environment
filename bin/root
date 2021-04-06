@@ -1,4 +1,12 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: root"
+  echo "DESCRIPTION: Execute command line commands in the container with root privileges"
+  echo "USAGE: root LINUX_COMMAND"
+  echo "EXAMPLE: root ls -la /"
+  exit
+fi
+
 [ -z "$1" ] && echo "Please specify a CLI command (ex. ls)" && exit
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf

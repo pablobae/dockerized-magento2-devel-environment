@@ -1,4 +1,11 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: remove"
+  echo "DESCRIPTION: Remove docker containers"
+  echo "USAGE: remove"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 

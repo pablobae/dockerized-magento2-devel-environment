@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: fixowns"
+  echo "DESCRIPTION: Fixes ownership in the container files/directories."
+  echo "USAGE: fixowns"
+  exit
+fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf

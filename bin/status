@@ -1,5 +1,10 @@
 #!/bin/bash
-
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: status"
+  echo "DESCRIPTION: Display docker containers informatios"
+  echo "USAGE: status"
+  exit
+fi
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 

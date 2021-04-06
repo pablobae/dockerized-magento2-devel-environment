@@ -1,4 +1,13 @@
 #!/bin/bash
+if
+ [ "$1" == "--help" ]
+then
+  echo "COMMAND: sync"
+  echo "DESCRIPTION: Syncronize your local database and/or media files with production or test server."
+  echo "USAGE: sync"
+  exit;
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 SYNCSERVERS_FILE_NAME=syncservers.conf

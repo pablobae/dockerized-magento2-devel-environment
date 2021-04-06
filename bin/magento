@@ -1,4 +1,13 @@
 #!/bin/bash
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: magento"
+  echo "DESCRIPTION: Run magento cli commands in the container"
+  echo "USAGE: magento CLI_COMMAND"
+  echo "EXAMPLE: magento module:status"
+  exit
+fi
+
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 
