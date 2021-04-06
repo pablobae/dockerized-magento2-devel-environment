@@ -8,8 +8,6 @@ CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 source $CONF_PATH/env/db.env
 
-
-
 enable_performance() {
   echo "Enabling performance..."
   if test -f $PROJECT_PATH/docker-compose.override.yml
@@ -21,7 +19,13 @@ enable_performance() {
       then
         $BIN_PATH/stop &&
         mv $PROJECT_PATH/docker-compose.override.yml.disabled $PROJECT_PATH/docker-compose.override.yml
+        if ! test -f $SRC_PATH/nginx.conf
+        then
+          cp -f $SRC_PATH/nginx.conf.sample $SRC_PATH/nginx.conf
+        fi
         $BIN_PATH/start
+        $BIN_PATH/copytocontainer --all
+        $BIN_PATH/restart
       else
         echo "Compose override file missing. You need to generate it and add your performance points first"
         echo "Run bin/composeoverride and add your custom options"
@@ -31,6 +35,7 @@ enable_performance() {
 
 disable_performance() {
     echo "Disabling performance.."
+    echo "Updating local data from container"
     $BIN_PATH/copyfromcontainer --all
     $BIN_PATH/stop &&
     mv $PROJECT_PATH/docker-compose.override.yml $PROJECT_PATH/docker-compose.override.yml.disabled
