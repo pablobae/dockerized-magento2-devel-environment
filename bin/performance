@@ -30,6 +30,7 @@ enable_performance() {
         cp -f $SRC_PATH/nginx.conf.sample $SRC_PATH/nginx.conf
       fi
       $BIN_PATH/start
+      echo "Copying data to container..."
       $BIN_PATH/copytocontainer --all
       $BIN_PATH/restart
     else
