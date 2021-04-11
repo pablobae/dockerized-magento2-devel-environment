@@ -7,6 +7,8 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 ### Added
 ### Changed
+* Improved the output of bin/commands
+
 ### Removed
 
 ## [1.0.4] - 06-04-2021
