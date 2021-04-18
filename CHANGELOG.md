@@ -6,6 +6,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+* Added support for xDebug v3+
 * Bugfix: docker compose yml configuration files not found when bin commands are not called from the environment folder.
 
 ### Changed
