@@ -14,4 +14,4 @@ then
   DOCKER_FILE=docker-compose.override.yml
 fi
 
-docker-compose --project-directory $PROJECT_PATH -f $DOCKER_FILE up -d --remove-orphans
+docker-compose --project-directory $PROJECT_PATH -f $PROJECT_PATH/$DOCKER_FILE up -d --remove-orphans
