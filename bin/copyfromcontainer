@@ -14,6 +14,7 @@ fi
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
 source $CURRENT_PATH/../conf/project.conf
 
+echo "Copying from container..."
 if [ "$1" == "--all" ]; then
   docker cp $(docker-compose ps -q ${DOCKER_SERVICE_PHP}|awk '{print $1}'):/var/www/html/./ $SRC_PATH/
   echo "Completed copying all files from container to host"
