@@ -65,9 +65,9 @@ src : /var/www/html
 
 This can be changed easily to improve Docker performance on Windows and Mac with these steps:
 
-Run **bin/dockercomposeoverride** to generate a *docker-compose.override.yml* file
+Run **bin/overridedockercompose** to generate a *docker-compose.override.yml* file
 ```
-bin/dockercomposeoverride
+bin/overridedockercompose
 ```
 Now you can edit that file to mount your desired folders and files or you can run **bin/configperformance** to configure automatically that file to include the following mounted folders and files:
 
