@@ -1,0 +1,8 @@
+  db_PROJECTNAME_m2:
+    image: DATABASE_ENGINE:DATABASE_VERSION
+    env_file:
+      - conf/env/db.env
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
