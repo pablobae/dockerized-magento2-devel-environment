@@ -19,3 +19,4 @@ rm -rf $PROJECT_PATH/*.sql >/dev/null
 rm -rf $CONF_PATH/repo.conf >/dev/null
 rm -rf $CONF_PATH/syncservers.conf >/dev/null
 rm -rf $CONF_PATH/project.conf >/dev/null
+rm -rf $CONF_PATH/docker/phpfpm/Dockerfile >/dev/null

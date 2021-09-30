@@ -1,0 +1,7 @@
+  phpfpm_PROJECTNAME_m2:
+    build:
+      context: .
+      dockerfile: 'conf/docker/phpfpm/Dockerfile'
+    links:
+      - db_PROJECTNAME_m2
+    volumes: *appvolumes
