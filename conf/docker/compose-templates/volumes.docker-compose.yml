@@ -1,0 +1,4 @@
+volumes:
+  appdata:
+  sockdata:
+  ssldata:

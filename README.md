@@ -1,7 +1,6 @@
-# Dockerized Magento 2 devel environment
+# Dockerized Magento 2 devel environment 
 
 Docker environment for Magento 2 projects development with **PHPFPM**, **Percona**, **Nginx** and **Mailhog**.
-
 
 ## Motivation
 
@@ -10,7 +9,11 @@ This project aims to offer a quick and easy solution for preparing Magento local
 ## Features included:
 * **one-command** installation
 * Supported OS: **Mac**, **Windows WSL**, **Ubuntu** and **Debian**  
-* Magento 2 version configurable
+* Magento 2 version configurable: From 2.3.0 to the latest
+* PHP version selector: from 7.2 to 8.1
+* Database engine selector: MariaDB or Mysql
+* MariaDB version selector
+* Elasticsearch optional and version selector  
 * Multi-project: docker service names are created dynamically by project
 * Xdebug ready
 * Docker mounted points optimization
@@ -45,6 +48,15 @@ Example:
 ```bash create-project.sh --project=myproject --domain=myproject.local --version=2.3.6-p1```
 
 
+### Environment highly configurable
+During the execution of the create-project command, you will be prompted to configure your environment according to your needed and the [Magento Sytem Requirements ](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html).
+
+It's possible to configure:
+* Database engine: **MySQL** or **MariaDB**
+* **PHP version**: from version 7.2 to 8.1 
+* Add **Elasticsearch** node and Elasticsearch version: from version 5 to 7.10.1
+
+
 ### Composer Authentication
 
 During the installation process, composer will request you to provide your **Magento public and private keys**: write the username and password values with your Magento public and private keys, respectively. 
@@ -65,9 +77,9 @@ src : /var/www/html
 
 This can be changed easily to improve Docker performance on Windows and Mac with these steps:
 
-Run **bin/dockercomposeoverride** to generate a *docker-compose.override.yml* file
+Run **bin/overridedockercompose** to generate a *docker-compose.override.yml* file
 ```
-bin/dockercomposeoverride
+bin/overridedockercompose
 ```
 Now you can edit that file to mount your desired folders and files or you can run **bin/configperformance** to configure automatically that file to include the following mounted folders and files:
 
@@ -81,7 +93,7 @@ Finally, use **bin/performance** command to enable your changes
 bin/performance on
 ```
 
-If you want disable your performance changes run
+If you want to disable your performance changes, run
 ```
 bin/performance off
 ```
@@ -112,9 +124,10 @@ bin/bash --help
 
 
 ### TODO
-* Add ElasticSearch
-* PHPSTORM integration
-* PHP Mess detector & PHPCs
+* Add rabittmq
+* Add Varnish
+* Add Redis
+
 
 ## Developers
 

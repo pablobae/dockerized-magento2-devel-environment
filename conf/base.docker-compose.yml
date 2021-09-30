@@ -34,7 +34,6 @@ services:
     volumes: *appvolumes
   db_PROJECTNAME_m2:
     image: percona:5.7
-    restart: always
     env_file:
       - conf/env/db.env
     ports:

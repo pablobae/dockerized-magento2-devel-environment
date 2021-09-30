@@ -9,6 +9,21 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Changed
 ### Removed
 
+## [1.0.6] - 30-09-2021
+### Added
+* Added support for Magento 2.4.X
+* Added ElasticSearch node support
+* Added Database Engine selection: Msql or MariaDB
+* Added option to select versions to be installed for PHP, MariaDB, Mysql Elasticsearch
+* Added TIMEZONE variable for configure Magento timezone 
+
+### Changed
+
+* Create-project script updated. Now it's possible to configure the environment: PHP version, Mysql or MariadB version, Elasticsearch ...  
+
+
+
+
 ## [1.0.5] - 18-04-2021
 ### Added
 * Added support for xDebug v3+
