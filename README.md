@@ -1,6 +1,6 @@
 # Dockerized Magento 2 devel environment 
 
-Docker environment for Magento 2 projects development with **PHPFPM**, **Percona**, **Nginx** and **Mailhog**.
+Docker environment for Magento 2 projects development with **PHPFPM**, **MariaDB** or **MySQL**, **Nginx**, **Elasticsearch** and **Mailhog**.
 
 ## Motivation
 
@@ -28,9 +28,9 @@ Clone this repo at your desired folder:
 
 
 ## Configuration
-Credentials for the database server are stored at **conf** > **env** > **db.env**, and **Magento** credentials and others install parameters are stored at **conf** > **magento** > **setup_config**. 
+Database credentials are stored at **conf** > **env** > **db.env**, and **Magento** credentials and others install parameters are stored at **conf** > **magento** > **setup_config**. 
 
-In both cases, you can change the values as you wish, but these changes will only be applied before running the installation command.
+In both cases, you can change the values as you wish, but these changes will only be taken into consideration before running the installation command.
 
 
 ## Installation
@@ -54,6 +54,7 @@ During the execution of the create-project command, you will be prompted to conf
 It's possible to configure:
 * Database engine: **MySQL** or **MariaDB**
 * **PHP version**: from version 7.2 to 8.1 
+* **Composer**: version 1 or 2  
 * Add **Elasticsearch** node and Elasticsearch version: from version 5 to 7.10.1
 
 
@@ -69,7 +70,7 @@ The installation process includes generating a self-signed cert to be used with 
 
 
 ### Docker mounted points and docker performance improvement
-By the default all magento document root is mounted:
+By the default the magento document root folder is mounted:
 
 ```
 src : /var/www/html
@@ -81,7 +82,7 @@ Run **bin/overridedockercompose** to generate a *docker-compose.override.yml* fi
 ```
 bin/overridedockercompose
 ```
-Now you can edit that file to mount your desired folders and files or you can run **bin/configperformance** to configure automatically that file to include the following mounted folders and files:
+Now you can edit that file to mount your desired folders and files or, you can run **bin/configperformance** to configure automatically that file to include the following mounted folders and files:
 
 ```
 src/app : /var/www/html/app
