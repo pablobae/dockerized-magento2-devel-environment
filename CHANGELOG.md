@@ -6,6 +6,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+* Bugfix: Elasticsearch magento cli installation parameters not available for Magento 2.3.X
 ### Changed
 ### Removed
 
@@ -14,23 +15,15 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 * Added support for Magento 2.4.X
 * Added ElasticSearch node support
 * Added Database Engine selection: Msql or MariaDB
-* Added option to select versions to be installed for PHP, MariaDB, Mysql Elasticsearch
+* Added option to select versions to be installed for PHP, MariaDB, Mysql, Composer and Elasticsearch
 * Added TIMEZONE variable for configure Magento timezone 
-
 ### Changed
-
-* Create-project script updated. Now it's possible to configure the environment: PHP version, Mysql or MariadB version, Elasticsearch ...  
-
-
-
+* Create-project script updated. Now it's possible to configure the environment: PHP version, Mysql or MariaDB version, Elasticsearch ...  
 
 ## [1.0.5] - 18-04-2021
 ### Added
 * Added support for xDebug v3+
 * Bugfix: docker compose yml configuration files not found when bin commands are not called from the environment folder.
-
-### Changed
-### Removed
 
 ## [1.0.4] - 06-04-2021
 ### Added
@@ -42,14 +35,10 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 * Added **sync** command to synchronize local environment (database and media) from remote servers
 * Added **clone** command to import data from a github repository
 * Added **--help** option to all **bin/commands** to display command information
-
-
 ### Changed
 * Updated **start** and **stop** command to support docker-compose.override files
 * Updated **create-project.sh** script to support performance command
 * bin/commands issue when they are called from not project root folder
-
-### Removed
 
 ## [1.0.3] - 20-03-2021
 ### Removed
@@ -59,21 +48,16 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Added
 * Displaying detected OS while project creation
 * Displaying backend information when sucessful install
-
 ### Changed
 * Improving information for SSL generation in WSL
-
 ### Removed
 * Removing comments
-
 
 ## [1.0.1] - 12-03-2021
 ### Added
 * Changelog file
-
 ### Changed
 * Fix OS detect on create-project script
 * Update documentation
-
 ## [1.0] - 29-09-2020
 * First working version

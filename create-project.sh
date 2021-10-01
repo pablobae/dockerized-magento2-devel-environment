@@ -145,32 +145,49 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
       ELASTICSEARCH=yes
       DOCKER_SERVICE_ELASTICSEARCH=elasticsearch_${PROJECT_NAME}_m2
       echo "DOCKER_SERVICE_ELASTICSEARCH"=${DOCKER_SERVICE_ELASTICSEARCH} >> ./conf/project.conf
+      # Elasticsearch install parameters are only available from Magento 2.4
+      ADD_ELASTICSEARCH_INSTALL_PARAMETERS=yes
+      if [[ "${VERSION}" == *"2.3"* ]]; then
+        ADD_ELASTICSEARCH_INSTALL_PARAMETERS=no
+      fi
       while true; do
         read -p "Which version of ELASTICSEARCH do 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5] or 7.10 [6]? [1/2/3/4/5/6]: " option
         case $option in
           1)
             ELASTICSEARCH_VERSION="5-alpine"
-            ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch5 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch5 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+             fi
             break;;
           2)
             ELASTICSEARCH_VERSION="6.8.18"
-            ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch6 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+             ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch6 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
             break;;
           3)
             ELASTICSEARCH_VERSION="7.6.2"
-            ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
             break;;
           4)
             ELASTICSEARCH_VERSION="7.7.1"
-            ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
             break;;
           5)
             ELASTICSEARCH_VERSION="7.9.3"
-            ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
             break;;
           6)
             ELASTICSEARCH_VERSION="7.10.1"
-            ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
             break;;
           *) echo "Please answer 1, 2, 3, 4 ,5 or 6";;
         esac
@@ -285,7 +302,6 @@ MAGENTO_INSTALL_OPTIONS="--db-host=${DOCKER_SERVICE_DB} \
   --use-secure-admin=1 \
   --timezone=${TIMEZONE} ${ELASTICSEARCH_INSTALL_OPTIONS}"
 
-echo "bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS}"
 ${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS}
 
 echo "Turning on developer mode.."
@@ -343,11 +359,21 @@ case $OS in
   ;;
 esac
 
-echo "You may now access your Magento instance at https://${BASE_URL}/"
-echo "Backend information:"
+echo "\nYou may now access your Magento instance at https://${BASE_URL}/"
+echo "Magento Backend information:"
 echo "- url: https://${BASE_URL}/${ADMIN_URL}"
 echo "- admin user: ${ADMIN_USER}"
 echo "- admin password: ${ADMIN_PASSWORD}"
 echo "- admin email: ${ADMIN_EMAIL}"
+
+if [[ "${ELASTICSEARCH}" == "yes" ]]; then
+  echo "Elasticsearch information:"
+  echo "- host: ${DOCKER_SERVICE_ELASTICSEARCH}"
+  echo "- port: 9200"
+  if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "no" ]]; then
+    echo "*** ATTENTION ***"
+    echo "This Magento version (${VERSION}) does not allow configuring Elasticsearch from the command line. Remember do it from the Magento Admin area."
+  fi
+fi
 
 
