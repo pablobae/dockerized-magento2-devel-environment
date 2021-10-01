@@ -9,7 +9,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Changed
 ### Removed
 
-## [1.0.6] - 30-09-2021
+## [1.1.0] - 30-09-2021
 ### Added
 * Added support for Magento 2.4.X
 * Added ElasticSearch node support
