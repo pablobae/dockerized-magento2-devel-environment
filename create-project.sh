@@ -304,6 +304,17 @@ MAGENTO_INSTALL_OPTIONS="--db-host=${DOCKER_SERVICE_DB} \
 
 ${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS}
 
+# Sample Data
+read -p "Do you want to install Magento SampleData module? [Y/N]: " option
+case $option in
+  [Yy])
+    echo "Installing sample data..."
+    ${BIN_PATH}/clinotty bin/magento sampledata:deploy  &&
+    ${BIN_PATH}/clinotty bin/magento setup:upgrade
+    ;;
+  *)
+esac
+
 echo "Turning on developer mode.."
 ${BIN_PATH}/clinotty bin/magento deploy:mode:set developer
 
