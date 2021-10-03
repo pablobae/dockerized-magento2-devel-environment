@@ -151,7 +151,7 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
         ADD_ELASTICSEARCH_INSTALL_PARAMETERS=no
       fi
       while true; do
-        read -p "Which version of ELASTICSEARCH do 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5] or 7.10 [6]? [1/2/3/4/5/6]: " option
+        read -p "Which version of ELASTICSEARCH do you want to install 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5] or 7.10 [6]? [1/2/3/4/5/6]: " option
         case $option in
           1)
             ELASTICSEARCH_VERSION="5-alpine"
@@ -198,6 +198,7 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
       ELASTICSEARCH=no
   esac
 echo "ELASTICSEARCH=${ELASTICSEARCH}" >> ./conf/project.conf
+
 # PHP
 while true; do
   read -p "Which version of PHP do you want to use? (7.2 [1], 7.3 [2], 7.4 [3] or 8.1 [4]). Select one [1/2/3/4]: " option
@@ -225,6 +226,36 @@ while true; do
 done
 echo "PHPFPM_VERSION=${PHPFPM_VERSION}" >> ./conf/project.conf
 
+# RabbitMQ
+read -p "Do you want to use RabbitMQ? [Y/N]: " option
+  case $option in
+    [Yy])
+      RABBITMQ=yes
+      DOCKER_SERVICE_RABBITMQ=rabbitmq_${PROJECT_NAME}_m2
+      echo "DOCKER_SERVICE_RABBITMQ"=${DOCKER_SERVICE_RABBITMQ} >> ./conf/project.conf
+      LINK_RABBITMQ="- ${DOCKER_SERVICE_RABBITMQ}"
+      VOLUME_RABBITMQ_DATA="rabbitmqdata:"
+      source conf/env/rabbitmq.env
+      RABBITMQ_INSTALL_OPTIONS="--amqp-host=${DOCKER_SERVICE_RABBITMQ} --amqp-port=5672 --amqp-user=${RABBITMQ_DEFAULT_USER} --amqp-password=${RABBITMQ_DEFAULT_PASS} --amqp-virtualhost=/"
+      while true; do
+        read -p "Which version of RABBITMQ do you want to install 3.7 [1] or 3.8 [2]? [1/2]: " option
+        case $option in
+          1)
+            RABBITMQ_VERSION="3.7.28-management-alpine"
+            break;;
+          2)
+            RABBITMQ_VERSION="3.8.23-management-alpine"
+            break;;
+          *) echo "Please answer 1 or 2";;
+        esac
+      done
+      echo "RABBITMQ_VERSION=${RABBITMQ_VERSION}" >> ./conf/project.conf
+      ;;
+    *)
+      RABBITMQ=no
+  esac
+echo "RABBITMQ=${RABBITMQ}" >> ./conf/project.conf
+
 source ./conf/project.conf
 
 echo "Script customizations by OS (${OS_MAC})..."
@@ -251,22 +282,34 @@ cat ${PROJECT_PATH}/conf/docker/compose-templates/db.docker-compose.yml >> ${PRO
 cat ${PROJECT_PATH}/conf/docker/compose-templates/mailhog.docker-compose.yml >> ${PROJECT_PATH}/docker-compose.yml
 if [ "$ELASTICSEARCH" == "yes" ]; then
   cat ${PROJECT_PATH}/conf/docker/compose-templates/elasticsearch.docker-compose.yml >> ${PROJECT_PATH}/docker-compose.yml
+  sed -i ${SED_FIRST_PARAMETER} "s/ELASTICSEARCH_VERSION/${ELASTICSEARCH_VERSION}/g" ${PROJECT_PATH}/docker-compose.yml
+fi
+if [ "${RABBITMQ}" == "yes" ]; then
+  cat ${PROJECT_PATH}/conf/docker/compose-templates/rabbitmq.docker-compose.yml >> ${PROJECT_PATH}/docker-compose.yml
+  sed -i ${SED_FIRST_PARAMETER} "s/RABBITMQ_VERSION/${RABBITMQ_VERSION}/g" ${PROJECT_PATH}/docker-compose.yml
 fi
 cat ${PROJECT_PATH}/conf/docker/compose-templates/volumes.docker-compose.yml >> ${PROJECT_PATH}/docker-compose.yml
 
 sed -i ${SED_FIRST_PARAMETER} "s/PROJECTNAME/${PROJECT_NAME}/g" ${PROJECT_PATH}/docker-compose.yml
 sed -i ${SED_FIRST_PARAMETER} "s/DATABASE_ENGINE/${DATABASE_ENGINE}/g" ${PROJECT_PATH}/docker-compose.yml
 sed -i ${SED_FIRST_PARAMETER} "s/DATABASE_VERSION/${DATABASE_VERSION}/g" ${PROJECT_PATH}/docker-compose.yml
-if [ "$ELASTICSEARCH" == "yes" ]; then
-  sed -i ${SED_FIRST_PARAMETER} "s/ELASTICSEARCH_VERSION/${ELASTICSEARCH_VERSION}/g" ${PROJECT_PATH}/docker-compose.yml
-fi
 
-#Configuring phpfpm dockerfile
+# Docker compose Links
+sed -i ${SED_FIRST_PARAMETER} "s/LINK_RABBITMQ/${LINK_RABBITMQ}/g" ${PROJECT_PATH}/docker-compose.yml
+# Docker compose volumes
+sed -i ${SED_FIRST_PARAMETER} "s/VOLUME_RABBITMQ_DATA/${VOLUME_RABBITMQ_DATA}/g" ${PROJECT_PATH}/docker-compose.yml
+
+
+# Configuring phpfpm dockerfile
 cp ./conf/docker/phpfpm/Dockerfile.template ./conf/docker/phpfpm/Dockerfile
 sed -i ${SED_FIRST_PARAMETER} "s/PHPFPM_VERSION/${PHPFPM_VERSION}/g" ${PROJECT_PATH}/conf/docker/phpfpm/Dockerfile
 sed -i ${SED_FIRST_PARAMETER} "s/COMPOSER_VERSION/${COMPOSER_VERSION}/g" ${PROJECT_PATH}/conf/docker/phpfpm/Dockerfile
 sed -i ${SED_FIRST_PARAMETER} "s/PHPFPM_DOCKER_INSTALL_PHP74/${PHPFPM_DOCKER_INSTALL_PHP74}/g" ${PROJECT_PATH}/conf/docker/phpfpm/Dockerfile
 sed -i ${SED_FIRST_PARAMETER} "s/PHPFPM_DOCKER_GD_COMMAND/${PHPFPM_DOCKER_GD_COMMAND}/g" ${PROJECT_PATH}/conf/docker/phpfpm/Dockerfile
+# Configuring php.ini
+cp ${PROJECT_PATH}/conf/php/php.ini.template ${PROJECT_PATH}/conf/php/php.ini
+sed -i ${SED_FIRST_PARAMETER} "s/DOCKER_SERVICE_MAILHOG/${DOCKER_SERVICE_MAILHOG}/g" ${PROJECT_PATH}/conf/php/php.ini
+
 
 echo "Building and starting docker services..."
 docker-compose up -d --build
@@ -302,7 +345,8 @@ MAGENTO_INSTALL_OPTIONS="--db-host=${DOCKER_SERVICE_DB} \
   --use-secure-admin=1 \
   --timezone=${TIMEZONE} ${ELASTICSEARCH_INSTALL_OPTIONS}"
 
-${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS}
+echo ${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS} ${RABBITMQ_INSTALL_OPTIONS}
+${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS} ${RABBITMQ_INSTALL_OPTIONS}
 
 # Sample Data
 read -p "Do you want to install Magento SampleData module? [Y/N]: " option
@@ -311,6 +355,7 @@ case $option in
     echo "Installing sample data..."
     ${BIN_PATH}/clinotty bin/magento sampledata:deploy  &&
     ${BIN_PATH}/clinotty bin/magento setup:upgrade
+    ${BIN_PATH}/clinotty bin/magento setup:di:compile
     ;;
   *)
 esac
@@ -348,9 +393,13 @@ if test -f ${PROJECT_PATH}/"docker-compose.yml_bak"
 then
   rm -f ${PROJECT_PATH}/"docker-compose.yml_bak"
 fi
-if test -f  ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile_bak"
+if test -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile_bak"
 then
   rm -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile_bak"
+fi
+if test -f ${PROJECT_PATH}/conf/php/"php.ini_bak"
+then
+  rm -f ${PROJECT_PATH}/conf/php/"php.ini_bak"
 fi
 
 ${BIN_PATH}/restart
@@ -370,7 +419,7 @@ case $OS in
   ;;
 esac
 
-echo "\nYou may now access your Magento instance at https://${BASE_URL}/"
+echo "You may now access your Magento instance at https://${BASE_URL}/"
 echo "Magento Backend information:"
 echo "- url: https://${BASE_URL}/${ADMIN_URL}"
 echo "- admin user: ${ADMIN_USER}"
@@ -386,5 +435,11 @@ if [[ "${ELASTICSEARCH}" == "yes" ]]; then
     echo "This Magento version (${VERSION}) does not allow configuring Elasticsearch from the command line. Remember do it from the Magento Admin area."
   fi
 fi
-
-
+if [[ "${RABBITMQ}" == "yes" ]]; then
+  echo "RabbitMQ information:"
+  echo "- host: ${DOCKER_SERVICE_RABBITMQ} | 127.0.0.1"
+  echo "- port: 5672"
+  echo "- management port: 15672"
+  echo "- user:  ${RABBITMQ_DEFAULT_USER}"
+  echo "- password:  ${RABBITMQ_DEFAULT_PASS}"
+fi

@@ -9,14 +9,15 @@ if [ "$1" == "--help" ]; then
 fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+source ${CURRENT_PATH}/../conf/project.conf
 
 $BIN_PATH/stop &&
-  $BIN_PATH/removeall
-rm -rf $PROJECT_PATH/src >/dev/null
-rm -rf $PROJECT_PATH/docker* >/dev/null
-rm -rf $PROJECT_PATH/*.sql >/dev/null
-rm -rf $CONF_PATH/repo.conf >/dev/null
-rm -rf $CONF_PATH/syncservers.conf >/dev/null
-rm -rf $CONF_PATH/project.conf >/dev/null
-rm -rf $CONF_PATH/docker/phpfpm/Dockerfile >/dev/null
+$BIN_PATH/removeall
+rm -rf ${PROJECT_PATH}/src >/dev/null
+rm -rf ${PROJECT_PATH}/docker* >/dev/null
+rm -rf ${PROJECT_PATH}/*.sql >/dev/null
+rm -rf ${CONF_PATH}/repo.conf >/dev/null
+rm -rf ${CONF_PATH}/syncservers.conf >/dev/null
+rm -rf ${CONF_PATH}/project.conf >/dev/null
+rm -rf ${CONF_PATH}/docker/phpfpm/Dockerfile >/dev/null
+rm -rf ${CONF_PATH}/php/php.ini >/dev/null

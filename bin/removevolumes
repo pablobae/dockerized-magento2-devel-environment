@@ -6,9 +6,14 @@ if [ "$1" == "--help" ]; then
   echo "USAGE: removevolumes"
   exit
 fi
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+source $CURRENT_PATH/../conf/project.conf
 
 current_folder=${PWD##*/}
 volume_prefix=`echo $current_folder | awk '{print tolower($0)}' | sed 's/\.//g'`
 docker volume rm ${volume_prefix}_appdata
 docker volume rm ${volume_prefix}_sockdata
 docker volume rm ${volume_prefix}_ssldata
+if [ "${RABBITMQ}" == "yes" ]; then
+  docker volume rm ${volume_prefix}_rabbitmqdata
+fi
