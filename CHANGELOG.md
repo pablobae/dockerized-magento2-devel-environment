@@ -6,12 +6,15 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
+
+## [1.1.1] - 03-10-2021
+### Added
 * Bugfix: Elasticsearch magento cli installation parameters not available for Magento 2.3.X
 * Bufgix: Unable to connect to mailhog service from Magento  
 * Feature: SampleData optionally installable during the project creation 
 * Added RabbitMQ service optionally installable during the project creation
-### Changed
-### Removed
 
 ## [1.1.0] - 30-09-2021
 ### Added
