@@ -1,0 +1,9 @@
+  rabbitmq_PROJECTNAME_m2:
+    image: rabbitmq:RABBITMQ_VERSION
+    env_file:
+      - conf/env/rabbitmq.env
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'

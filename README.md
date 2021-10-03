@@ -1,6 +1,6 @@
 # Dockerized Magento 2 devel environment 
 
-Docker environment for Magento 2 projects development with **PHPFPM**, **MariaDB** or **MySQL**, **Nginx**, **Elasticsearch** and **Mailhog**.
+Docker environment for Magento 2 projects development with **PHPFPM**, **MariaDB** or **MySQL**, **Nginx**, **Elasticsearch**, **RabbitMQ** and **Mailhog**.
 
 ## Motivation
 
@@ -9,15 +9,16 @@ This project aims to offer a quick and easy solution for preparing Magento local
 ## Features included:
 * **one-command** installation
 * Supported OS: **Mac**, **Windows WSL**, **Ubuntu** and **Debian**  
-* Magento 2 version configurable: From 2.3.0 to the latest
-* PHP version selector: from 7.2 to 8.1
-* Database engine selector: MariaDB or Mysql
-* MariaDB version selector
-* Elasticsearch optional and version selector  
+* Magento 2 version **configurable**: From 2.3.0 to 2.4.X
+* **PHP** version selector: from 7.2 to 8.1
+* Database engine selector: **MariaDB** or **Mysql**
+* MariaDB and Mysql version selector
+* **Elasticsearch** optional and version selector
+* **RabbitMQ** optional and version selector
 * Multi-project: docker service names are created dynamically by project
 * Xdebug ready
 * Docker mounted points optimization
-* Sync data from production and test server included
+* **Sync** data from production and test server included
 
 
 ## Download
@@ -55,7 +56,8 @@ It's possible to configure:
 * Database engine: **MySQL** or **MariaDB**
 * **PHP version**: from version 7.2 to 8.1 
 * **Composer**: version 1 or 2  
-* Add **Elasticsearch** node and Elasticsearch version: from version 5 to 7.10.1
+* **Elasticsearch** optional node and Elasticsearch version: from version 5 to 7.10.1
+* **RabbitMQ** optional node and RabbitMQ version: from version 3.7 to 3.8. Web management included.
 
 
 ### Composer Authentication
@@ -111,8 +113,8 @@ You can find a large list of useful command on **bin** folder, including:
 * **bin/composer**: to run composer commands inside the container
 * **bin/magento**: to run magento 2 cli inside the container
 * **bin/databaseimport**: to import database
-* **bin/sync**: to syncronyze local database with remote database
-* **bin/clone**: to clone data from githubrepository
+* **bin/sync**: to synchronize data from production and stage environments
+* **bin/clone**: to clone data from github repository
 * ...
 
 You can get detailed information of each command and how to use it running the command with the **--help** option:
@@ -125,7 +127,6 @@ bin/bash --help
 
 
 ### TODO
-* Add rabittmq
 * Add Varnish
 * Add Redis
 
