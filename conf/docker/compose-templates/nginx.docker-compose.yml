@@ -8,6 +8,7 @@
     links:
       - db_PROJECTNAME_m2
       - phpfpm_PROJECTNAME_m2
+      LINK_RABBITMQ
     volumes: &appvolumes
 #      - ./src:/var/www/html:delegated
 #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:delegated
