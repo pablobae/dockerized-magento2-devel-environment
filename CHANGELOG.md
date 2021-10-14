@@ -6,7 +6,8 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
-* Added command createmagentoauthjson
+* Added createmagentoauthjson command
+* Added describe command
 ### Changed
 * Performance improvement in commands performance on, fixperms and copytocontainer
 ### Removed
