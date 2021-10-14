@@ -15,8 +15,7 @@ if [ -z "$1" ]; then
   $BIN_PATH/clinotty find var vendor pub/static pub/media app/etc -type d -exec chmod u+w {} \;
   $BIN_PATH/clinotty chmod u+x bin/magento
 else
-  $BIN_PATH/clinotty find $1 -type f -exec chmod u+w {} \;
-  $BIN_PATH/clinotty find $1 -type d -exec chmod u+w {} \;
+  $BIN_PATH/clinotty chmod u+w $1;
 fi
 
 echo "Filesystem permissions corrected."

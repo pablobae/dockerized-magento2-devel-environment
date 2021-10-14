@@ -14,24 +14,89 @@ if [ "$1" == "--help" ]; then
 fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
-source $CONF_PATH/env/db.env
+source ${CURRENT_PATH}/../conf/project.conf
+source ${CONF_PATH}/env/db.env
+
+VOLUMES_FLAG_START='MOUNTED_POINTS_START'
+VOLUMES_FLAG_END='MOUNTED_POINTS_END'
 
 enable_performance() {
   echo "Enabling performance..."
-  if test -f $PROJECT_PATH/docker-compose.override.yml; then
+  if test -f ${PROJECT_PATH}/docker-compose.override.yml; then
     echo "Performance is already ON. Check your docker-compose.override.yml file"
     exit
   else
-    if test -f $PROJECT_PATH/docker-compose.override.yml.disabled; then
-      $BIN_PATH/stop &&
-        mv $PROJECT_PATH/docker-compose.override.yml.disabled $PROJECT_PATH/docker-compose.override.yml
-      if ! test -f $SRC_PATH/nginx.conf; then
-        cp -f $SRC_PATH/nginx.conf.sample $SRC_PATH/nginx.conf
+    if test -f ${PROJECT_PATH}/docker-compose.override.yml.disabled; then
+      ${BIN_PATH}/stop
+      mv ${PROJECT_PATH}/docker-compose.override.yml.disabled ${PROJECT_PATH}/docker-compose.override.yml
+      ${BIN_PATH}/start
+      if [ ! -f ${SRC_PATH}/nginx.conf ]; then
+        cp -f ${SRC_PATH}/nginx.conf.sample ${SRC_PATH}/nginx.conf
       fi
-      $BIN_PATH/start
-      $BIN_PATH/copytocontainer --all
-      $BIN_PATH/restart
+      ${BIN_PATH}/copytocontainer nginx.conf
+      read_mounted_folders='no'
+      volumes_data=()
+      while read line; do
+        if [[ "${line}" == *"${VOLUMES_FLAG_START}"* ]]; then
+          read_mounted_folders='yes'
+          continue
+        fi;
+        if [[ "${line}" == *"${VOLUMES_FLAG_END}"* ]]; then
+          read_mounted_folders='no'
+          break
+        fi;
+        if [[ "${read_mounted_folders}" == 'yes' ]]; then
+          volumes_data+=("${line}")
+        fi;
+      done < ${PROJECT_PATH}'/docker-compose.override.yml'
+
+      mounted_points=()
+      IFS=':'
+      for volume_data in "${volumes_data[@]}"
+      do
+          mounted_point='';
+          first_dots_separator_found='no'
+          host_folder_start='no'
+          for (( i=0; i<${#volume_data}; i++ )); do
+            case ${volume_data:$i:1} in
+              [-])
+                host_folder_start='yes'
+                ;;
+              [:])
+                if [[ "${host_folder_start}" == 'yes' ]]; then
+                    first_dots_separator_found='yes'
+                    break
+                fi
+                ;;
+              ' ')
+                ;;
+              *)
+                if [[ "${host_folder_start}" == 'yes' ]]; then
+                    mounted_point=${mounted_point}${volume_data:$i:1}
+                fi
+            esac
+          done
+          mounted_points+=("${mounted_point}")
+      done
+      for i in "${mounted_points[@]}"
+      do
+        echo "Mounted point: ${i}"
+        if [[ -d ${i} ]]; then
+          # cleaning mounted point
+          delimiter='src/'
+          string=${i}${delimiter}
+          array=()
+          while [[ ${string} ]]; do
+            array+=( "${string%%"$delimiter"*}" );
+            string=${string#*"$delimiter"};
+          done;
+          ${BIN_PATH}/copytocontainer ${array[${#array[@]}-1]}
+        else
+            $BIN_PATH/fixowns ${array[${#array[@]}-1]}
+            $BIN_PATH/fixperms ${array[${#array[@]}-1]}
+        fi
+      done
+      ${BIN_PATH}/restart
     else
       echo "Compose override file missing. You need to generate it and add your performance points first"
       echo "Run bin/composeoverride and add your custom options"
@@ -42,10 +107,10 @@ enable_performance() {
 disable_performance() {
   echo "Disabling performance.."
   echo "Updating local data from container"
-  $BIN_PATH/copyfromcontainer --all
-  $BIN_PATH/stop &&
-    mv $PROJECT_PATH/docker-compose.override.yml $PROJECT_PATH/docker-compose.override.yml.disabled
-  $BIN_PATH/start
+  ${BIN_PATH}/copyfromcontainer --all
+  ${BIN_PATH}/stop &&
+    mv ${PROJECT_PATH}/docker-compose.override.yml ${PROJECT_PATH}/docker-compose.override.yml.disabled
+  ${BIN_PATH}/start
 }
 
 echo "Setting performance configuration..."
