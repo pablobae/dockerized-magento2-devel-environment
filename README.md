@@ -115,6 +115,7 @@ You can find a large list of useful command on **bin** folder, including:
 * **bin/databaseimport**: to import database
 * **bin/sync**: to synchronize data from production and stage environments
 * **bin/clone**: to clone data from github repository
+* **bin/describe**: to display project information
 * ...
 
 You can get detailed information of each command and how to use it running the command with the **--help** option:
