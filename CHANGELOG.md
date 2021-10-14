@@ -10,6 +10,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 * Added describe command
 ### Changed
 * Performance improvement in commands performance on, fixperms and copytocontainer
+* Updating bin commands to check if the project is configured before being executed.
 ### Removed
 
 ## [1.1.1] - 03-10-2021

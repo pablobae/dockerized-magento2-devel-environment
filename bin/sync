@@ -9,7 +9,11 @@ then
 fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
 SYNCSERVERS_FILE_NAME=syncservers.conf
 
 if ! test -f "${CONF_PATH}/${SYNCSERVERS_FILE_NAME}"

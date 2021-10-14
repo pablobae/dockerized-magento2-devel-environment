@@ -8,7 +8,11 @@ if [ "$1" == "--help" ]; then
 fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
 
 docker-compose exec -T -u root ${DOCKER_SERVICE_APP} mkcert -install
 docker cp $(docker-compose ps -q ${DOCKER_SERVICE_APP}|awk '{print $1}'):/root/.local/share/mkcert/rootCA.pem .
