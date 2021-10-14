@@ -6,12 +6,17 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
+
+## [1.1.2] - 14-10-2021
+### Added
 * Added createmagentoauthjson command
 * Added describe command
 ### Changed
-* Performance improvement in commands performance on, fixperms and copytocontainer
-* Updating bin commands to check if the project is configured before being executed.
-### Removed
+* Performance improvement in performance, fixperms and copytocontainer commands
+* Updated bin commands to check if the project is configured before being executed.
+
 
 ## [1.1.1] - 03-10-2021
 ### Added
