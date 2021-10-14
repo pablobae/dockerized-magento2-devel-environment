@@ -322,9 +322,9 @@ echo "Loading Magento and environment configuration..."
 source conf/setup_magento_config
 source conf/env/db.env
 
-echo "Loading Magento and environment configuration..."
-source conf/setup_magento_config
-source conf/env/db.env
+# Auth Json file
+mkdir src
+${BIN_PATH}/createmagentoauthjson
 
 echo "Installing Magento..."
 MAGENTO_INSTALL_OPTIONS="--db-host=${DOCKER_SERVICE_DB} \
@@ -345,7 +345,6 @@ MAGENTO_INSTALL_OPTIONS="--db-host=${DOCKER_SERVICE_DB} \
   --use-secure-admin=1 \
   --timezone=${TIMEZONE} ${ELASTICSEARCH_INSTALL_OPTIONS}"
 
-echo ${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS} ${RABBITMQ_INSTALL_OPTIONS}
 ${BIN_PATH}/clinotty bin/magento setup:install ${MAGENTO_INSTALL_OPTIONS} ${RABBITMQ_INSTALL_OPTIONS}
 
 # Sample Data
@@ -353,7 +352,7 @@ read -p "Do you want to install Magento SampleData module? [Y/N]: " option
 case $option in
   [Yy])
     echo "Installing sample data..."
-    ${BIN_PATH}/clinotty bin/magento sampledata:deploy  &&
+    ${BIN_PATH}/clinotty bin/magento sampledata:deploy
     ${BIN_PATH}/clinotty bin/magento setup:upgrade
     ${BIN_PATH}/clinotty bin/magento setup:di:compile
     ;;
@@ -372,7 +371,6 @@ echo "Clearing the cache to apply updates..."
 ${BIN_PATH}/clinotty bin/magento cache:flush
 
 echo "Copying files from container to host after install..."
-mkdir src
 ${BIN_PATH}/copyfromcontainer --all
 
 echo "Generating SSL certificate..."
@@ -389,17 +387,17 @@ sleep 5 #Ensure containers are loaded
 cp ${SRC_PATH}/nginx.conf.sample ${SRC_PATH}/nginx.conf
 
 #Cleaning sed files
-if test -f ${PROJECT_PATH}/"docker-compose.yml_bak"
+if test -f ${PROJECT_PATH}/"docker-compose.yml${SED_FIRST_PARAMETER}"
 then
-  rm -f ${PROJECT_PATH}/"docker-compose.yml_bak"
+  rm -f ${PROJECT_PATH}/"docker-compose.yml${SED_FIRST_PARAMETER}"
 fi
-if test -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile_bak"
+if test -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile${SED_FIRST_PARAMETER}"
 then
-  rm -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile_bak"
+  rm -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile${SED_FIRST_PARAMETER}"
 fi
-if test -f ${PROJECT_PATH}/conf/php/"php.ini_bak"
+if test -f ${PROJECT_PATH}/conf/php/"php.ini${SED_FIRST_PARAMETER}"
 then
-  rm -f ${PROJECT_PATH}/conf/php/"php.ini_bak"
+  rm -f ${PROJECT_PATH}/conf/php/"php.ini${SED_FIRST_PARAMETER}"
 fi
 
 ${BIN_PATH}/restart
