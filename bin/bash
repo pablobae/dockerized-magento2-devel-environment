@@ -12,4 +12,10 @@ if [ "$1" == "--help" ]; then
   exit
 fi
 
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
+
 $BIN_PATH/cli bash

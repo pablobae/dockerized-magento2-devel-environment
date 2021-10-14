@@ -10,7 +10,11 @@ if [ "$1" == "--help" ]; then
 fi
 
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
 source $CONF_PATH/env/db.env
 
 
@@ -27,6 +31,8 @@ configure_basic_performance_configuration() {
   sed -i $SED_FIRST_PARAMETER "s/#      - appdata/      - appdata/g" $OVERRIDE_FILE
   sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/app/      - \.\/src\/app/g" $OVERRIDE_FILE
   sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/vendor/      - \.\/src\/vendor/g" $OVERRIDE_FILE
+  sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/composer.json/      - \.\/src\/composer.json/g" $OVERRIDE_FILE
+  sed -i $SED_FIRST_PARAMETER "s/#      - \.\/src\/composer.lock/      - \.\/src\/composer.lock/g" $OVERRIDE_FILE
   if test -f $OVERRIDE_FILE\'\'
   then
     rm -f $OVERRIDE_FILE\'\'
@@ -54,6 +60,8 @@ echo "Basic performance configuration generated"
 echo "Mounted folders:"
 echo "   - app"
 echo "   - vendor"
+echo "   - composer.json"
+echo "   - composer.lock"
 echo "Run bin/performance on command to enabled it"
 
 

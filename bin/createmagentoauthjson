@@ -1,0 +1,55 @@
+#!/bin/bash
+## Description: Create auth.json file with Magento credentials
+## Usage: createmagentoauthjson
+
+if [ "$1" == "--help" ]; then
+  echo "COMMAND: createmagentoauthjson"
+  echo "DESCRIPTION: Create auth.json file with Magento credentials"
+  echo "USAGE: createmagentoauthjson"
+  exit
+fi
+
+CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
+source ${CONF_PATH}/env/db.env
+
+generate_auth_json_file() {
+  cp ${SRC_PATH}/auth.json.sample ${SRC_PATH}/auth.json
+  read -p "Please, enter your Magento public key: " publickey
+  read -p "Enter your magento private key: " privatekey
+  sed -i ${SED_FIRST_PARAMETER} "s/<public-key>/${publickey}/g" ${SRC_PATH}/auth.json
+  sed -i ${SED_FIRST_PARAMETER} "s/<private-key>/${privatekey}/g" ${SRC_PATH}/auth.json
+  ${BIN_PATH}/copytocontainer auth.json
+  rm -f ${SRC_PATH}/auth.json${SED_FIRST_PARAMETER}
+  echo "File generated"
+}
+
+echo "Generating auth.json file with Magento credentials: "
+
+
+if test -f ${SRC_PATH}/auth.json ; then
+  echo "File auth.json already exists."
+  while true; do
+    read -p "Do you want generate it again and override the existing files? [Yes/No]" override
+    case $override in
+    [Yy]*)
+      rm -f ${SRC_PATH}/auth.json
+      generate_auth_json_file
+      break
+      ;;
+    [Nn]*)
+      break
+      ;;
+    *) echo "Please answer Y for generate the file again, or N for don't generate it" ;;
+    esac
+  done
+else
+  if [ ! -f ${SRC_PATH}/auth.json.sample ]; then
+      ${BIN_PATH}/copyfromcontainer auth.json.sample
+  fi
+  generate_auth_json_file
+fi

@@ -10,6 +10,10 @@ fi
 
 [ -z "$1" ] && echo "Please specify a CLI command (ex. ls)" && exit
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
 
 docker-compose exec -u root -T ${DOCKER_SERVICE_PHP} "$@"
