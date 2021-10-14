@@ -1,11 +1,16 @@
 #!/bin/bash
 if [ "$1" == "--help" ]; then
   echo "COMMAND: status"
-  echo "DESCRIPTION: Display docker containers informatios"
+  echo "DESCRIPTION: Display docker containers information"
   echo "USAGE: status"
   exit
 fi
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
 
+echo "DOCKER CONTAINER INFORMATION"
 docker-compose -f $PROJECT_PATH/docker-compose.yml ps

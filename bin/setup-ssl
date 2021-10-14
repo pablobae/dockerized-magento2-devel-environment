@@ -11,7 +11,11 @@ fi
 
 BASE_URL=${1:-m2.test}
 CURRENT_PATH="$(cd "$(dirname "$0")" && pwd)"
-source $CURRENT_PATH/../conf/project.conf
+if [ ! -f ${CURRENT_PATH}/../conf/project.conf ]; then
+  echo "ERROR: Project file not found ${CURRENT_PATH}/../conf/project.conf"
+  exit
+fi
+source ${CURRENT_PATH}/../conf/project.conf
 
 # Generate certificate authority if not it's already setup
 if ! docker-compose exec -T -u root ${DOCKER_SERVICE_APP} cat /root/.local/share/mkcert/rootCA.pem | grep -q 'BEGIN CERTIFICATE'; then

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Changed
 ### Removed
 
+## [1.1.2] - 14-10-2021
+### Added
+* Added createmagentoauthjson command
+* Added describe command
+### Changed
+* Performance improvement in performance, fixperms and copytocontainer commands
+* Updated bin commands to check if the project is configured before being executed.
+
+
 ## [1.1.1] - 03-10-2021
 ### Added
 * Bugfix: Elasticsearch magento cli installation parameters not available for Magento 2.3.X

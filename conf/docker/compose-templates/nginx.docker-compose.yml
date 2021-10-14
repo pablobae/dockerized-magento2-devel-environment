@@ -13,7 +13,11 @@
 #      - ./src:/var/www/html:delegated
 #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:delegated
       - appdata:/var/www/html
+# MOUNTED_POINTS_START
 #      - ./src/app:/var/www/html/app:delegated
 #      - ./src/vendor:/var/www/html/vendor:delegated
+#      - ./src/composer.json:/var/www/html/composer.json:delegated
+#      - ./src/composer.lock:/var/www/html/composer.lock:delegated
+# MOUNTED_POINTS_END
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
