@@ -9,6 +9,10 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Changed
 ### Removed
 
+## [1.1.3] - 25-02-2022
+### Added
+* Bugfix: Sed parameter issue on Ubuntu when creating projects.
+
 ## [1.1.2] - 14-10-2021
 ### Added
 * Added createmagentoauthjson command
