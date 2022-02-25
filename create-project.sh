@@ -260,11 +260,12 @@ source ./conf/project.conf
 
 echo "Script customizations by OS (${OS_MAC})..."
 case $OS in
-  $OS_WSL)
-    SED_FIRST_PARAMETER=
+  $OS_MAC)
+    SED_FIRST_PARAMETER="_bak"
+    REMOVE_SED_BACKUP_FILES="yes"
   ;;
   *)
-    SED_FIRST_PARAMETER="_bak"
+    SED_FIRST_PARAMETER=
   ;;
 esac
 
@@ -387,17 +388,19 @@ sleep 5 #Ensure containers are loaded
 cp ${SRC_PATH}/nginx.conf.sample ${SRC_PATH}/nginx.conf
 
 #Cleaning sed files
-if test -f ${PROJECT_PATH}/"docker-compose.yml${SED_FIRST_PARAMETER}"
-then
-  rm -f ${PROJECT_PATH}/"docker-compose.yml${SED_FIRST_PARAMETER}"
-fi
-if test -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile${SED_FIRST_PARAMETER}"
-then
-  rm -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile${SED_FIRST_PARAMETER}"
-fi
-if test -f ${PROJECT_PATH}/conf/php/"php.ini${SED_FIRST_PARAMETER}"
-then
-  rm -f ${PROJECT_PATH}/conf/php/"php.ini${SED_FIRST_PARAMETER}"
+if [[ "${REMOVE_SED_BACKUP_FILES}" == "yes" ]]; then
+  if test -f ${PROJECT_PATH}/"docker-compose.yml${SED_FIRST_PARAMETER}"
+  then
+    rm -f ${PROJECT_PATH}/"docker-compose.yml${SED_FIRST_PARAMETER}"
+  fi
+  if test -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile${SED_FIRST_PARAMETER}"
+  then
+    rm -f ${PROJECT_PATH}/conf/docker/phpfpm/"Dockerfile${SED_FIRST_PARAMETER}"
+  fi
+  if test -f ${PROJECT_PATH}/conf/php/"php.ini${SED_FIRST_PARAMETER}"
+  then
+    rm -f ${PROJECT_PATH}/conf/php/"php.ini${SED_FIRST_PARAMETER}"
+  fi
 fi
 
 ${BIN_PATH}/restart
