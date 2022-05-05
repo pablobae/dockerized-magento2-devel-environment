@@ -7,6 +7,8 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 ### Added
 ### Changed
+* Fix: Fix services information displayed after installing Magento, and command bin/describe
+* 
 ### Removed
 
 ## [1.1.3] - 25-02-2022
