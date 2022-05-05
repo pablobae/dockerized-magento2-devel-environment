@@ -20,22 +20,26 @@ echo ""
 echo "PROJECT SERVICES INFORMATION"
 echo "Project Name: ${PROJECT_NAME}"
 echo "Project URL: https://${BASE_URL}"
+echo ""
 echo "Database Service:"
 echo "- Server from host: ${BASE_URL}"
 echo "- Server from container: ${DOCKER_SERVICE_DB}"
-echo "Mailhog Service: https://${BASE_URL}:8025"
+echo ""
+echo "Mailhog Service: http://${BASE_URL}:8025"
 
 if [[ "${ELASTICSEARCH}" == "yes" ]]; then
+  echo ""
   echo "Elasticsearch information:"
   echo "- host: ${DOCKER_SERVICE_ELASTICSEARCH}"
   echo "- port: 9200"
 fi
 
 if [[ "${RABBITMQ}" == "yes" ]]; then
+  echo ""
   echo "RabbitMQ:"
   echo "- Server from host: ${BASE_URL}"
   echo "- Server from container: ${DOCKER_SERVICE_RABBITMQ}"
   echo "- Port: 5672"
   echo "- Management port: 15672"
-  echo "- Management URL: https://${BASE_URL}:15672"
+  echo "- Management URL: http://${BASE_URL}:15672"
 fi

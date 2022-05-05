@@ -8,6 +8,7 @@ and this project adheres to [Semantic Version](http://semver.org/spec/v2.0.0.htm
 ### Added
 * Added Support for ElasticSearch 7.16
 ### Changed
+* BugFix: Fix services information displayed after installing Magento, and command bin/describe
 * Bugfix: Update auth.json generation file
 ### Removed
 

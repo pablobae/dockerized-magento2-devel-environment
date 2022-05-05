@@ -433,7 +433,16 @@ echo "- admin user: ${ADMIN_USER}"
 echo "- admin password: ${ADMIN_PASSWORD}"
 echo "- admin email: ${ADMIN_EMAIL}"
 
+echo ""
+echo "Database Service:"
+echo "- Server from host: ${BASE_URL}"
+echo "- Server from container: ${DOCKER_SERVICE_DB}"
+
+echo ""
+echo "Mailhog Service URL: http://${BASE_URL}:8025"
+
 if [[ "${ELASTICSEARCH}" == "yes" ]]; then
+  echo ""
   echo "Elasticsearch information:"
   echo "- host: ${DOCKER_SERVICE_ELASTICSEARCH}"
   echo "- port: 9200"
@@ -443,10 +452,14 @@ if [[ "${ELASTICSEARCH}" == "yes" ]]; then
   fi
 fi
 if [[ "${RABBITMQ}" == "yes" ]]; then
+  echo ""
   echo "RabbitMQ information:"
   echo "- host: ${DOCKER_SERVICE_RABBITMQ} | 127.0.0.1"
   echo "- port: 5672"
   echo "- management port: 15672"
+  echo "- management URL: http://${BASE_URL}:15672"
   echo "- user:  ${RABBITMQ_DEFAULT_USER}"
   echo "- password:  ${RABBITMQ_DEFAULT_PASS}"
 fi
+echo ""
+echo "Remember: you can display the command bin/describe to display the information of project services"
