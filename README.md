@@ -9,7 +9,7 @@ This project aims to offer a quick and easy solution for preparing Magento local
 ## Features included:
 * **one-command** installation
 * Supported OS: **Mac**, **Windows WSL**, **Ubuntu** and **Debian**  
-* Magento 2 version **configurable**: From 2.3.0 to 2.4.X
+* Magento 2 version **configurable**: From 2.3.0 to 2.4.5
 * **PHP** version selector: from 7.2 to 8.1
 * Database engine selector: **MariaDB** or **Mysql**
 * MariaDB and Mysql version selector
