@@ -18,13 +18,19 @@ source ${CURRENT_PATH}/../conf/project.conf
 source ${CONF_PATH}/env/db.env
 
 generate_auth_json_file() {
-  cp ${SRC_PATH}/auth.json.sample ${SRC_PATH}/auth.json
   read -p "Please, enter your Magento public key: " publickey
   read -p "Enter your magento private key: " privatekey
-  sed -i ${SED_FIRST_PARAMETER} "s/<public-key>/${publickey}/g" ${SRC_PATH}/auth.json
-  sed -i ${SED_FIRST_PARAMETER} "s/<private-key>/${privatekey}/g" ${SRC_PATH}/auth.json
-  ${BIN_PATH}/copytocontainer auth.json
-  rm -f ${SRC_PATH}/auth.json${SED_FIRST_PARAMETER}
+
+  echo '' > ${SRC_PATH}/auth.json
+  echo "{" >> ${SRC_PATH}/auth.json
+  echo '    "http-basic": {' >> ${SRC_PATH}/auth.json
+  echo '        "repo.magento.com": {' >> ${SRC_PATH}/auth.json
+  echo '            "username": "'${publickey}'",' >> ${SRC_PATH}/auth.json
+  echo '            "password": "'${privatekey}'"' >> ${SRC_PATH}/auth.json
+  echo '        }' >> ${SRC_PATH}/auth.json
+  echo '    }' >> ${SRC_PATH}/auth.json
+  echo '}' >> ${SRC_PATH}/auth.json
+
   echo "File generated"
 }
 
@@ -53,3 +59,5 @@ else
   fi
   generate_auth_json_file
 fi
+${BIN_PATH}/copytocontainer auth.json
+

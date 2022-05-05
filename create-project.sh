@@ -151,7 +151,7 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
         ADD_ELASTICSEARCH_INSTALL_PARAMETERS=no
       fi
       while true; do
-        read -p "Which version of ELASTICSEARCH do you want to install 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5] or 7.10 [6]? [1/2/3/4/5/6]: " option
+        read -p "Which version of ELASTICSEARCH do you want to install 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5], 7.10 [6] or 7.16 [7]? [1/2/3/4/5/6/7]: " option
         case $option in
           1)
             ELASTICSEARCH_VERSION="5-alpine"
@@ -189,7 +189,13 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
               ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
             fi
             break;;
-          *) echo "Please answer 1, 2, 3, 4 ,5 or 6";;
+          7)
+            ELASTICSEARCH_VERSION="7.16.3"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
+            break;;
+          *) echo "Please answer 1, 2, 3, 4 ,5, 6 or 7";;
         esac
       done
       echo "ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}" >> ./conf/project.conf
@@ -427,7 +433,16 @@ echo "- admin user: ${ADMIN_USER}"
 echo "- admin password: ${ADMIN_PASSWORD}"
 echo "- admin email: ${ADMIN_EMAIL}"
 
+echo ""
+echo "Database Service:"
+echo "- Server from host: ${BASE_URL}"
+echo "- Server from container: ${DOCKER_SERVICE_DB}"
+
+echo ""
+echo "Mailhog Service URL: http://${BASE_URL}:8025"
+
 if [[ "${ELASTICSEARCH}" == "yes" ]]; then
+  echo ""
   echo "Elasticsearch information:"
   echo "- host: ${DOCKER_SERVICE_ELASTICSEARCH}"
   echo "- port: 9200"
@@ -437,10 +452,14 @@ if [[ "${ELASTICSEARCH}" == "yes" ]]; then
   fi
 fi
 if [[ "${RABBITMQ}" == "yes" ]]; then
+  echo ""
   echo "RabbitMQ information:"
   echo "- host: ${DOCKER_SERVICE_RABBITMQ} | 127.0.0.1"
   echo "- port: 5672"
   echo "- management port: 15672"
+  echo "- management URL: http://${BASE_URL}:15672"
   echo "- user:  ${RABBITMQ_DEFAULT_USER}"
   echo "- password:  ${RABBITMQ_DEFAULT_PASS}"
 fi
+echo ""
+echo "Remember: you can display the command bin/describe to display the information of project services"
