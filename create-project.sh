@@ -151,7 +151,7 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
         ADD_ELASTICSEARCH_INSTALL_PARAMETERS=no
       fi
       while true; do
-        read -p "Which version of ELASTICSEARCH do you want to install 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5] or 7.10 [6]? [1/2/3/4/5/6]: " option
+        read -p "Which version of ELASTICSEARCH do you want to install 5.x [1], 6.x [2], 7.6 [3], 7.7 [4], 7.9 [5], 7.10 [6] or 7.16 [7]? [1/2/3/4/5/6/7]: " option
         case $option in
           1)
             ELASTICSEARCH_VERSION="5-alpine"
@@ -189,7 +189,13 @@ read -p "Do you want to use Elasticsearch? [Y/N]: " option
               ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
             fi
             break;;
-          *) echo "Please answer 1, 2, 3, 4 ,5 or 6";;
+          7)
+            ELASTICSEARCH_VERSION="7.16.3"
+            if [[ "${ADD_ELASTICSEARCH_INSTALL_PARAMETERS}" == "yes" ]]; then
+              ELASTICSEARCH_INSTALL_OPTIONS=" --search-engine=elasticsearch7 --elasticsearch-host=${DOCKER_SERVICE_ELASTICSEARCH} --elasticsearch-port=9200"
+            fi
+            break;;
+          *) echo "Please answer 1, 2, 3, 4 ,5, 6 or 7";;
         esac
       done
       echo "ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}" >> ./conf/project.conf

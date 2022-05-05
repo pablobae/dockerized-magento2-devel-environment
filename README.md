@@ -56,7 +56,7 @@ It's possible to configure:
 * Database engine: **MySQL** or **MariaDB**
 * **PHP version**: from version 7.2 to 8.1 
 * **Composer**: version 1 or 2  
-* **Elasticsearch** optional node and Elasticsearch version: from version 5 to 7.10.1
+* **Elasticsearch** optional node and Elasticsearch version: from version 5 to 7.16.1
 * **RabbitMQ** optional node and RabbitMQ version: from version 3.7 to 3.8. Web management included.
 
 
